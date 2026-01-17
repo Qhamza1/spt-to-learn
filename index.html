@@ -3,181 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPT TO LEARN - LIVE</title>
-    
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-
+    <title>SPT TO LEARN</title>
     <style>
-        :root { --primary: #6366f1; --teacher: #2ecc71; --dark: #2c3e50; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f1f5f9; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 450px; margin-top: 20px; }
-        .main-title { color: #5c6bc0; font-size: 35px; font-weight: 900; margin-bottom: 10px; text-align: center; }
-        input { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; text-align: right; }
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; color: white; margin-top: 10px; font-size: 18px; }
-        .btn-teacher { background: var(--teacher); }
-        .btn-dark { background: var(--dark); }
-        .btn-back { background: #94a3b8; margin-top: 20px; }
-        .section { display: none; width: 100%; max-width: 450px; }
-        .active { display: block; }
-        .student-item { background: #f8fafc; padding: 15px; border-radius: 15px; margin-bottom: 10px; border-right: 5px solid var(--primary); text-align: right; }
-        .st-controls { display: flex; gap: 5px; margin-top: 10px; }
-        .st-btn { flex: 1; padding: 8px; border-radius: 8px; border: 1px solid #ddd; background: #fff; cursor: pointer; }
-        .active-p { background: #2ecc71 !important; color: white; }
-        .active-m { background: #f39c12 !important; color: white; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 400px; text-align: center; }
+        h1 { color: #5d6ab1; margin-bottom: 25px; font-size: 28px; }
+        button { width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-teacher { background-color: #2ecc71; color: white; } /* أخضر */
+        .btn-login { background-color: #34495e; color: white; } /* كحلي */
+        .back-btn { background-color: #e74c3c; color: white; margin-top: 20px; } /* زر العودة */
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; text-align: center; }
+        .hidden { display: none; }
+        .student-card { background: #f9f9f9; padding: 15px; margin: 10px 0; border-radius: 10px; border-right: 5px solid #2ecc71; text-align: right; line-height: 1.6; }
     </style>
 </head>
 <body>
 
-    <div class="main-title">SPT TO LEARN</div>
-
-    <div id="home" class="section active">
-        <div class="card">
-            <button class="btn btn-teacher" onclick="navigateTo('teacher-reg')">تسجيل معلم جديد</button>
-            <button class="btn btn-dark" onclick="navigateTo('login')">دخول الحساب</button>
-        </div>
+<div class="container" id="app">
+    <h1>SPT TO LEARN</h1>
+    
+    <div id="main-screen">
+        <button class="btn-teacher" onclick="showScreen('teacher-reg')">تسجيل معلم جديد</button>
+        <button class="btn-login" onclick="showScreen('login-screen')">دخول الحساب</button>
     </div>
 
-    <div id="teacher-reg" class="section">
-        <div class="card">
-            <h3>حساب معلم جديد (سحابي)</h3>
-            <input type="text" id="t-name" placeholder="الاسم الثلاثي">
-            <input type="password" id="t-pass" placeholder="كلمة السر">
-            <button class="btn btn-teacher" onclick="processReg()">إنشاء الكود السحابي</button>
-            <button class="btn btn-back" onclick="navigateTo('home')">رجوع</button>
-        </div>
+    <div id="teacher-reg" class="hidden">
+        <h3>إنشاء حساب معلم</h3>
+        <input type="text" id="teacher-name" placeholder="اسمك الكامل">
+        <button class="btn-teacher" onclick="registerTeacher()">تفعيل الكود</button>
+        <button class="back-btn" onclick="location.reload()">إلغاء والعودة</button>
     </div>
 
-    <div id="login" class="section">
-        <div class="card">
-            <h3>دخول النظام</h3>
-            <input type="text" id="l-code" placeholder="أدخل الكود (SPT-...)">
-            <input type="password" id="l-pass" placeholder="كلمة السر (للمعلم فقط)">
-            <button class="btn btn-dark" onclick="handleLogin()">دخول</button>
-            <button class="btn btn-back" onclick="navigateTo('home')">رجوع</button>
-        </div>
+    <div id="login-screen" class="hidden">
+        <h3>مرحباً بك</h3>
+        <input type="text" id="login-code" placeholder="أدخل الكود (معلم أو طالب)">
+        <button class="btn-login" onclick="handleLogin()">دخول آمن</button>
+        <button class="back-btn" onclick="location.reload()">العودة للرئيسية</button>
     </div>
 
-    <div id="teacher-dash" class="section">
-        <div class="card">
-            <h3 id="t-welcome">لوحة المعلم</h3>
-            <div style="background: #eef2ff; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
-                <input type="text" id="st-name-input" placeholder="اسم الطالب الجديد">
-                <button class="btn btn-dark" style="padding:10px;" onclick="addStudent()">+ إضافة للسحابة</button>
-            </div>
-            <div id="students-list"></div>
-            <button class="btn btn-teacher" onclick="saveData()">💾 حفظ ومزامنة نهائية</button>
-            <button class="btn btn-back" onclick="location.reload()">خروج</button>
-        </div>
+    <div id="teacher-dashboard" class="hidden">
+        <h3>إدارة الطلاب</h3>
+        <input type="text" id="s-name" placeholder="اسم الطالب">
+        <input type="text" id="s-grade" placeholder="الدرجة / التقييم">
+        <button class="btn-teacher" onclick="addStudent()">حفظ وإظهار الكود</button>
+        <div id="student-list"></div>
+        <button class="back-btn" onclick="location.reload()">تسجيل الخروج</button>
     </div>
 
-    <div id="student-dash" class="section">
-        <div class="card">
-            <h3 id="s-welcome">تقرير الطالب</h3>
-            <div id="student-report"></div>
-            <button class="btn btn-back" onclick="location.reload()">خروج</button>
-        </div>
+    <div id="student-view" class="hidden">
+        <h3>تقرير الطالب</h3>
+        <div id="student-info"></div>
+        <button class="back-btn" onclick="location.reload()">خروج</button>
     </div>
+</div>
 
-    <script>
-        // الربط بالرابط السحابي الخاص بك
-        const firebaseConfig = { databaseURL: "https://spt-to-learn-default-rtdb.firebaseio.com/" };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-        let currentTeacherCode = "";
-        let studentsData = [];
+    // بياناتك الخاصة من الصورة
+    const firebaseConfig = {
+      apiKey: "AIzaSyBmjOSQ9VlpKqs-V2IXEY_tWLjCSluQuGE",
+      authDomain: "spt-to-learn.firebaseapp.com",
+      databaseURL: "https://spt-to-learn-default-rtdb.firebaseio.com",
+      projectId: "spt-to-learn",
+      storageBucket: "spt-to-learn.firebasestorage.app",
+      messagingSenderId: "122536294060",
+      appId: "1:122536294060:web:74353a633191a48d231109",
+      measurementId: "G-X9HS41QSQ5"
+    };
 
-        function navigateTo(id) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    window.showScreen = function(screenId) {
+        document.querySelectorAll('.container > div').forEach(div => div.classList.add('hidden'));
+        document.getElementById(screenId).classList.remove('hidden');
+    };
+
+    window.handleLogin = function() {
+        const code = document.getElementById('login-code').value.trim();
+        if(code.startsWith('SPT-T')) {
+            showScreen('teacher-dashboard');
+        } else if(code.startsWith('SPT-S')) {
+            fetchStudentData(code);
+        } else {
+            alert('الكود غير صحيح');
         }
+    };
 
-        function processReg() {
-            const name = document.getElementById('t-name').value;
-            const pass = document.getElementById('t-pass').value;
-            if (!name || !pass) return alert("أكمل البيانات");
-            const code = "SPT-T" + Math.random().toString(36).substr(2, 4).toUpperCase();
-            db.ref('users/' + code).set({name, pass, role: 'teacher', students: []}).then(() => {
-                alert("تم! كودك السحابي هو: " + code);
-                navigateTo('login');
+    window.addStudent = function() {
+        const name = document.getElementById('s-name').value;
+        const grade = document.getElementById('s-grade').value;
+        const studentCode = 'SPT-S-' + Math.floor(1000 + Math.random() * 9000);
+        
+        if(name && grade) {
+            set(ref(db, 'students/' + studentCode), {
+                name: name,
+                grade: grade,
+                date: new Date().toLocaleDateString()
+            }).then(() => {
+                const list = document.getElementById('student-list');
+                list.innerHTML = `<div class="student-card">
+                    <b>تم الحفظ!</b><br>
+                    الطالب: ${name}<br>
+                    كود الطالب: <span style="color:red">${studentCode}</span>
+                </div>` + list.innerHTML;
             });
         }
+    };
 
-        function handleLogin() {
-            const code = document.getElementById('l-code').value.toUpperCase();
-            const pass = document.getElementById('l-pass').value;
-            db.ref('users/' + code).once('value').then((snapshot) => {
-                const user = snapshot.val();
-                if (user) {
-                    if (user.role === 'teacher' && user.pass === pass) {
-                        currentTeacherCode = code;
-                        studentsData = user.students || [];
-                        document.getElementById('t-welcome').innerText = "أهلاً أ/ " + user.name;
-                        renderTeacherList();
-                        navigateTo('teacher-dash');
-                    } else if (user.role === 'student') {
-                        renderStudentReport(user);
-                        navigateTo('student-dash');
-                    } else { alert("كلمة سر خاطئة"); }
-                } else { alert("الكود غير موجود في السحابة"); }
-            });
-        }
-
-        function addStudent() {
-            const name = document.getElementById('st-name-input').value;
-            if (!name) return alert("أدخل اسم الطالب");
-            const sCode = "SPT-S" + Math.random().toString(36).substr(2, 4).toUpperCase();
-            const newSt = { name, code: sCode, role: 'student', present: false, paid: false, grade: "" };
-            studentsData.push(newSt);
-            db.ref('users/' + sCode).set(newSt);
-            renderTeacherList();
-            alert("تمت الإضافة! كود الطالب: " + sCode);
-            document.getElementById('st-name-input').value = "";
-        }
-
-        function renderTeacherList() {
-            const list = document.getElementById('students-list');
-            list.innerHTML = "<h4>قائمة الطلاب:</h4>";
-            studentsData.forEach((s, idx) => {
-                const div = document.createElement('div');
-                div.className = 'student-item';
-                div.innerHTML = `
-                    <strong>${s.name}</strong> <small>(كود: ${s.code})</small>
-                    <div class="st-controls">
-                        <button class="st-btn ${s.present ? 'active-p' : ''}" onclick="toggleSt(${idx}, 'present')">حضور</button>
-                        <button class="st-btn ${s.paid ? 'active-m' : ''}" onclick="toggleSt(${idx}, 'paid')">مصاريف</button>
-                        <input type="number" value="${s.grade}" style="width:50px;" onchange="updateSt(${idx}, this.value)">
-                    </div>
-                `;
-                list.appendChild(div);
-            });
-        }
-
-        function toggleSt(idx, key) {
-            studentsData[idx][key] = !studentsData[idx][key];
-            renderTeacherList();
-        }
-
-        function updateSt(idx, val) { studentsData[idx].grade = val; }
-
-        function saveData() {
-            db.ref('users/' + currentTeacherCode + '/students').set(studentsData);
-            studentsData.forEach(s => db.ref('users/' + s.code).set(s));
-            alert("✅ تم الحفظ السحابي بنجاح!");
-        }
-
-        function renderStudentReport(user) {
-            document.getElementById('s-welcome').innerText = "مرحباً: " + user.name;
-            document.getElementById('student-report').innerHTML = `
-                <div class="student-item">
-                    <p>الحالة: ${user.present ? 'حاضر ✅' : 'غائب ❌'}</p>
-                    <p>المصاريف: ${user.paid ? 'مدفوعة 💰' : 'غير مدفوعة'}</p>
-                    <h2>الدرجة: ${user.grade || '---'}</h2>
-                </div>
-            `;
-        }
-    </script>
+    function fetchStudentData(code) {
+        const dbRef = ref(getDatabase());
+        get(child(dbRef, `students/${code}`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                showScreen('student-view');
+                document.getElementById('student-info').innerHTML = `
+                    <div class="student-card">
+                        <p><b>اسم الطالب:</b> ${data.name}</p>
+                        <p><b>التقييم:</b> ${data.grade}</p>
+                        <p><b>التاريخ:</b> ${data.date}</p>
+                    </div>`;
+            } else {
+                alert("لم يتم العثور على هذا الكود");
+            }
+        });
+    }
+</script>
 </body>
 </html>
- 
