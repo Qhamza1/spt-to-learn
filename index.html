@@ -3,57 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPT TO LEARN</title>
+    <title>SPT TO LEARN - النسخة الكاملة</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 400px; text-align: center; }
-        h1 { color: #5d6ab1; margin-bottom: 25px; font-size: 28px; }
-        button { width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-teacher { background-color: #2ecc71; color: white; } /* أخضر */
-        .btn-login { background-color: #34495e; color: white; } /* كحلي */
-        .back-btn { background-color: #e74c3c; color: white; margin-top: 20px; } /* زر العودة */
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; text-align: center; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 450px; text-align: center; }
+        h1 { color: #5d6ab1; font-size: 24px; margin-bottom: 20px; }
+        .main-menu { display: grid; gap: 10px; }
+        button { width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 17px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-teacher { background-color: #2ecc71; color: white; }
+        .btn-parent { background-color: #3498db; color: white; }
+        .btn-student { background-color: #9b59b6; color: white; }
+        .btn-back { background-color: #e74c3c; color: white; margin-top: 15px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; text-align: center; }
         .hidden { display: none; }
-        .student-card { background: #f9f9f9; padding: 15px; margin: 10px 0; border-radius: 10px; border-right: 5px solid #2ecc71; text-align: right; line-height: 1.6; }
+        .card { background: #f9f9f9; padding: 15px; margin-top: 15px; border-radius: 10px; border-right: 5px solid #5d6ab1; text-align: right; }
     </style>
 </head>
 <body>
 
-<div class="container" id="app">
+<div class="container">
     <h1>SPT TO LEARN</h1>
-    
-    <div id="main-screen">
-        <button class="btn-teacher" onclick="showScreen('teacher-reg')">تسجيل معلم جديد</button>
-        <button class="btn-login" onclick="showScreen('login-screen')">دخول الحساب</button>
+
+    <div id="main-menu" class="screen">
+        <div class="main-menu">
+            <button class="btn-teacher" onclick="showScreen('teacher-section')">قسم المعلم</button>
+            <button class="btn-parent" onclick="showScreen('parent-section')">قسم ولي الأمر</button>
+            <button class="btn-student" onclick="showScreen('student-section')">قسم الطالب</button>
+        </div>
     </div>
 
-    <div id="teacher-reg" class="hidden">
-        <h3>إنشاء حساب معلم</h3>
-        <input type="text" id="teacher-name" placeholder="اسمك الكامل">
-        <button class="btn-teacher" onclick="registerTeacher()">تفعيل الكود</button>
-        <button class="back-btn" onclick="location.reload()">إلغاء والعودة</button>
-    </div>
-
-    <div id="login-screen" class="hidden">
-        <h3>مرحباً بك</h3>
-        <input type="text" id="login-code" placeholder="أدخل الكود (معلم أو طالب)">
-        <button class="btn-login" onclick="handleLogin()">دخول آمن</button>
-        <button class="back-btn" onclick="location.reload()">العودة للرئيسية</button>
-    </div>
-
-    <div id="teacher-dashboard" class="hidden">
-        <h3>إدارة الطلاب</h3>
+    <div id="teacher-section" class="screen hidden">
+        <h3>لوحة تحكم المعلم</h3>
         <input type="text" id="s-name" placeholder="اسم الطالب">
-        <input type="text" id="s-grade" placeholder="الدرجة / التقييم">
-        <button class="btn-teacher" onclick="addStudent()">حفظ وإظهار الكود</button>
-        <div id="student-list"></div>
-        <button class="back-btn" onclick="location.reload()">تسجيل الخروج</button>
+        <input type="text" id="s-grade" placeholder="الدرجة أو التقييم">
+        <button class="btn-teacher" onclick="addStudent()">حفظ الطالب وإصدار كود</button>
+        <div id="teacher-output"></div>
+        <button class="btn-back" onclick="showScreen('main-menu')">عودة للقائمة الرئيسية</button>
     </div>
 
-    <div id="student-view" class="hidden">
-        <h3>تقرير الطالب</h3>
-        <div id="student-info"></div>
-        <button class="back-btn" onclick="location.reload()">خروج</button>
+    <div id="parent-section" class="screen hidden">
+        <h3>متابعة ولي الأمر</h3>
+        <input type="text" id="parent-code" placeholder="أدخل كود الطالب">
+        <button class="btn-parent" onclick="checkData('parent')">عرض التقرير</button>
+        <div id="parent-output"></div>
+        <button class="btn-back" onclick="showScreen('main-menu')">عودة للقائمة الرئيسية</button>
+    </div>
+
+    <div id="student-section" class="screen hidden">
+        <h3>صفحة الطالب</h3>
+        <input type="text" id="student-code" placeholder="أدخل كودك الخاص">
+        <button class="btn-student" onclick="checkData('student')">رؤية درجاتي</button>
+        <div id="student-output"></div>
+        <button class="btn-back" onclick="showScreen('main-menu')">عودة للقائمة الرئيسية</button>
     </div>
 </div>
 
@@ -61,7 +62,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
     import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-    // بياناتك الخاصة من الصورة
+    // بيانات Firebase الخاصة بك
     const firebaseConfig = {
       apiKey: "AIzaSyBmjOSQ9VlpKqs-V2IXEY_tWLjCSluQuGE",
       authDomain: "spt-to-learn.firebaseapp.com",
@@ -69,67 +70,47 @@
       projectId: "spt-to-learn",
       storageBucket: "spt-to-learn.firebasestorage.app",
       messagingSenderId: "122536294060",
-      appId: "1:122536294060:web:74353a633191a48d231109",
-      measurementId: "G-X9HS41QSQ5"
+      appId: "1:122536294060:web:74353a633191a48d231109"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
+    // دالة التنقل بين الشاشات (زر العودة)
     window.showScreen = function(screenId) {
-        document.querySelectorAll('.container > div').forEach(div => div.classList.add('hidden'));
+        document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
         document.getElementById(screenId).classList.remove('hidden');
     };
 
-    window.handleLogin = function() {
-        const code = document.getElementById('login-code').value.trim();
-        if(code.startsWith('SPT-T')) {
-            showScreen('teacher-dashboard');
-        } else if(code.startsWith('SPT-S')) {
-            fetchStudentData(code);
-        } else {
-            alert('الكود غير صحيح');
-        }
-    };
-
+    // دالة إضافة طالب (قسم المعلم)
     window.addStudent = function() {
         const name = document.getElementById('s-name').value;
         const grade = document.getElementById('s-grade').value;
-        const studentCode = 'SPT-S-' + Math.floor(1000 + Math.random() * 9000);
+        const code = 'SPT-S-' + Math.floor(1000 + Math.random() * 9000);
         
         if(name && grade) {
-            set(ref(db, 'students/' + studentCode), {
-                name: name,
-                grade: grade,
-                date: new Date().toLocaleDateString()
-            }).then(() => {
-                const list = document.getElementById('student-list');
-                list.innerHTML = `<div class="student-card">
-                    <b>تم الحفظ!</b><br>
-                    الطالب: ${name}<br>
-                    كود الطالب: <span style="color:red">${studentCode}</span>
-                </div>` + list.innerHTML;
+            set(ref(db, 'students/' + code), { name, grade, date: new Date().toLocaleDateString() })
+            .then(() => {
+                document.getElementById('teacher-output').innerHTML = `
+                    <div class="card">✅ تم الحفظ! كود الطالب هو: <b style="color:red">${code}</b></div>`;
             });
         }
     };
 
-    function fetchStudentData(code) {
-        const dbRef = ref(getDatabase());
-        get(child(dbRef, `students/${code}`)).then((snapshot) => {
-            if (snapshot.exists()) {
-                const data = snapshot.val();
-                showScreen('student-view');
-                document.getElementById('student-info').innerHTML = `
-                    <div class="student-card">
-                        <p><b>اسم الطالب:</b> ${data.name}</p>
-                        <p><b>التقييم:</b> ${data.grade}</p>
-                        <p><b>التاريخ:</b> ${data.date}</p>
-                    </div>`;
+    // دالة جلب البيانات (لولي الأمر والطالب)
+    window.checkData = function(type) {
+        const code = document.getElementById(type + '-code').value.trim();
+        const outputDiv = document.getElementById(type + '-output');
+        
+        get(child(ref(db), `students/${code}`)).then((snap) => {
+            if (snap.exists()) {
+                const d = snap.val();
+                outputDiv.innerHTML = `<div class="card"><b>الاسم:</b> ${d.name}<br><b>التقييم:</b> ${d.grade}<br><b>التاريخ:</b> ${d.date}</div>`;
             } else {
-                alert("لم يتم العثور على هذا الكود");
+                alert("الكود غير صحيح!");
             }
         });
-    }
+    };
 </script>
 </body>
 </html>
