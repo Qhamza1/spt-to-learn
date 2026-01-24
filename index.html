@@ -3,58 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPT TO LEARN - النسخة الكاملة</title>
+    <title>SPT TO LEARN | المستقبل يبدأ هنا</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 450px; text-align: center; }
-        h1 { color: #5d6ab1; font-size: 24px; margin-bottom: 20px; }
-        .main-menu { display: grid; gap: 10px; }
-        button { width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 17px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-teacher { background-color: #2ecc71; color: white; }
-        .btn-parent { background-color: #3498db; color: white; }
-        .btn-student { background-color: #9b59b6; color: white; }
-        .btn-back { background-color: #e74c3c; color: white; margin-top: 15px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; text-align: center; }
+        :root {
+            --primary: #6366f1;
+            --secondary: #a855f7;
+            --accent: #ec4899;
+            --bg-glass: rgba(255, 255, 255, 0.15);
+            --text-color: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(-45deg, #0f172a, #1e293b, #312e81, #581c87);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: var(--bg-glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 480px;
+            text-align: center;
+            color: var(--text-color);
+            position: relative;
+        }
+
+        h1 {
+            font-weight: 800;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            background: linear-gradient(to right, #fff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        /* Screens Animation */
+        .screen {
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .main-menu {
+            display: grid;
+            gap: 15px;
+        }
+
+        .btn-main {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 25px;
+            border: none;
+            border-radius: 18px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-main:hover {
+            transform: scale(1.03);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-teacher { border-left: 6px solid #4ade80; }
+        .btn-parent { border-left: 6px solid #38bdf8; }
+        .btn-student { border-left: 6px solid #fbbf24; }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            margin: 12px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        input::placeholder { color: rgba(255, 255, 255, 0.5); }
+        input:focus { outline: none; border-color: var(--primary); background: rgba(255, 255, 255, 0.1); }
+
+        .action-btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .action-btn:hover { filter: brightness(1.2); }
+
+        .btn-back {
+            background: transparent;
+            color: #94a3b8;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-back:hover { color: white; }
+
+        .card-result {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 15px;
+            border-right: 4px solid var(--accent);
+            text-align: right;
+            line-height: 1.8;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         .hidden { display: none; }
-        .card { background: #f9f9f9; padding: 15px; margin-top: 15px; border-radius: 10px; border-right: 5px solid #5d6ab1; text-align: right; }
+
+        i { margin-left: 10px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>SPT TO LEARN</h1>
-
     <div id="main-menu" class="screen">
+        <h1><i class="fas fa-rocket"></i> SPT TO LEARN</h1>
         <div class="main-menu">
-            <button class="btn-teacher" onclick="showScreen('teacher-section')">قسم المعلم</button>
-            <button class="btn-parent" onclick="showScreen('parent-section')">قسم ولي الأمر</button>
-            <button class="btn-student" onclick="showScreen('student-section')">قسم الطالب</button>
+            <button class="btn-main btn-teacher" onclick="showScreen('teacher-section')">
+                <span>قسم المعلم</span>
+                <i class="fas fa-chalkboard-teacher"></i>
+            </button>
+            <button class="btn-main btn-parent" onclick="showScreen('parent-section')">
+                <span>قسم ولي الأمر</span>
+                <i class="fas fa-user-shield"></i>
+            </button>
+            <button class="btn-main btn-student" onclick="showScreen('student-section')">
+                <span>قسم الطالب</span>
+                <i class="fas fa-user-graduate"></i>
+            </button>
         </div>
     </div>
 
     <div id="teacher-section" class="screen hidden">
-        <h3>لوحة تحكم المعلم</h3>
-        <input type="text" id="s-name" placeholder="اسم الطالب">
-        <input type="text" id="s-grade" placeholder="الدرجة أو التقييم">
-        <button class="btn-teacher" onclick="addStudent()">حفظ الطالب وإصدار كود</button>
+        <h3><i class="fas fa-edit"></i> لوحة التحكم</h3>
+        <input type="text" id="s-name" placeholder="اسم الطالب بالكامل">
+        <input type="text" id="s-grade" placeholder="الدرجة أو التقييم (مثال: ممتاز)">
+        <button class="action-btn" onclick="addStudent()">حفظ وإصدار الكود</button>
         <div id="teacher-output"></div>
-        <button class="btn-back" onclick="showScreen('main-menu')">عودة للقائمة الرئيسية</button>
+        <button class="btn-back" onclick="showScreen('main-menu')"><i class="fas fa-arrow-right"></i> عودة</button>
     </div>
 
     <div id="parent-section" class="screen hidden">
-        <h3>متابعة ولي الأمر</h3>
-        <input type="text" id="parent-code" placeholder="أدخل كود الطالب">
-        <button class="btn-parent" onclick="checkData('parent')">عرض التقرير</button>
+        <h3><i class="fas fa-search"></i> متابعة الأداء</h3>
+        <input type="text" id="parent-code" placeholder="أدخل كود الطالب الرقمي">
+        <button class="action-btn" style="background: var(--secondary);" onclick="checkData('parent')">استخراج التقرير</button>
         <div id="parent-output"></div>
-        <button class="btn-back" onclick="showScreen('main-menu')">عودة للقائمة الرئيسية</button>
+        <button class="btn-back" onclick="showScreen('main-menu')"><i class="fas fa-arrow-right"></i> عودة</button>
     </div>
 
     <div id="student-section" class="screen hidden">
-        <h3>صفحة الطالب</h3>
-        <input type="text" id="student-code" placeholder="أدخل كودك الخاص">
-        <button class="btn-student" onclick="checkData('student')">رؤية درجاتي</button>
+        <h3><i class="fas fa-star"></i> درجاتي</h3>
+        <input type="text" id="student-code" placeholder="أدخل الكود الخاص بك">
+        <button class="action-btn" style="background: var(--accent);" onclick="checkData('student')">عرض النتيجة</button>
         <div id="student-output"></div>
-        <button class="btn-back" onclick="showScreen('main-menu')">عودة للقائمة الرئيسية</button>
+        <button class="btn-back" onclick="showScreen('main-menu')"><i class="fas fa-arrow-right"></i> عودة</button>
     </div>
 </div>
 
@@ -62,7 +215,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
     import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-    // بيانات Firebase الخاصة بك
     const firebaseConfig = {
       apiKey: "AIzaSyBmjOSQ9VlpKqs-V2IXEY_tWLjCSluQuGE",
       authDomain: "spt-to-learn.firebaseapp.com",
@@ -76,38 +228,53 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // دالة التنقل بين الشاشات (زر العودة)
     window.showScreen = function(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
         document.getElementById(screenId).classList.remove('hidden');
     };
 
-    // دالة إضافة طالب (قسم المعلم)
     window.addStudent = function() {
         const name = document.getElementById('s-name').value;
         const grade = document.getElementById('s-grade').value;
-        const code = 'SPT-S-' + Math.floor(1000 + Math.random() * 9000);
+        const code = 'SPT-' + Math.floor(1000 + Math.random() * 9000);
         
         if(name && grade) {
-            set(ref(db, 'students/' + code), { name, grade, date: new Date().toLocaleDateString() })
+            set(ref(db, 'students/' + code), { 
+                name, 
+                grade, 
+                date: new Date().toLocaleDateString('ar-EG') 
+            })
             .then(() => {
                 document.getElementById('teacher-output').innerHTML = `
-                    <div class="card">✅ تم الحفظ! كود الطالب هو: <b style="color:red">${code}</b></div>`;
+                    <div class="card-result" style="border-right-color: #4ade80">
+                        <i class="fas fa-check-circle" style="color: #4ade80"></i> تم الحفظ بنجاح!<br>
+                        كود الطالب: <strong style="font-size:1.2rem; color:#fff">${code}</strong>
+                    </div>`;
+                document.getElementById('s-name').value = '';
+                document.getElementById('s-grade').value = '';
             });
+        } else {
+            alert("يرجى ملء جميع البيانات");
         }
     };
 
-    // دالة جلب البيانات (لولي الأمر والطالب)
     window.checkData = function(type) {
         const code = document.getElementById(type + '-code').value.trim();
         const outputDiv = document.getElementById(type + '-output');
         
+        if(!code) return alert("يرجى إدخال الكود");
+
         get(child(ref(db), `students/${code}`)).then((snap) => {
             if (snap.exists()) {
                 const d = snap.val();
-                outputDiv.innerHTML = `<div class="card"><b>الاسم:</b> ${d.name}<br><b>التقييم:</b> ${d.grade}<br><b>التاريخ:</b> ${d.date}</div>`;
+                outputDiv.innerHTML = `
+                    <div class="card-result">
+                        <div><i class="fas fa-user"></i> الطالب: ${d.name}</div>
+                        <div><i class="fas fa-award"></i> التقييم: ${d.grade}</div>
+                        <div><i class="fas fa-calendar-alt"></i> التاريخ: ${d.date}</div>
+                    </div>`;
             } else {
-                alert("الكود غير صحيح!");
+                alert("عذراً، الكود غير موجود!");
             }
         });
     };
