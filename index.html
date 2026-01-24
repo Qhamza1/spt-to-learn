@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPT LEARN | المنصة الشاملة</title>
+    <title>SPT LEARN | المنصة التعليمية المتكاملة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -13,41 +13,100 @@
             --primary: #6366f1; --secondary: #8b5cf6;
             --bg: #0f172a; --card: rgba(255, 255, 255, 0.05);
             --text: #ffffff; --input: rgba(0,0,0,0.3);
+            --danger: #ef4444; --success: #10b981;
         }
+
         .light-mode {
             --bg: #f1f5f9; --card: rgba(255, 255, 255, 0.9);
             --text: #1e293b; --input: #ffffff;
         }
-        * { box-sizing: border-box; transition: 0.3s; }
-        body { margin: 0; font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; justify-content: center; align-items: center; }
 
-        /* Splash Screen */
-        #splash-screen { position: fixed; inset: 0; background: #0f172a; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
+        * { box-sizing: border-box; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        body {
+            margin: 0; font-family: 'Cairo', sans-serif;
+            background: var(--bg); color: var(--text);
+            min-height: 100vh; display: flex; justify-content: center; align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* --- Splash Screen --- */
+        #splash-screen {
+            position: fixed; inset: 0; background: #0f172a;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 9999;
+        }
+        .splash-logo { font-size: 5rem; color: var(--primary); animation: pulse 2s infinite; }
         .fade-out { opacity: 0; visibility: hidden; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px var(--primary)); } 50% { transform: scale(1.1); filter: drop-shadow(0 0 25px var(--secondary)); } }
 
-        .container { width: 92%; max-width: 500px; background: var(--card); backdrop-filter: blur(20px); border-radius: 35px; padding: 30px; border: 1px solid rgba(128,128,128,0.2); position: relative; margin: 20px 0; }
-        .header-btns { position: absolute; top: 25px; left: 25px; right: 25px; display: flex; justify-content: space-between; }
-        .icon-btn { width: 42px; height: 42px; border-radius: 14px; border: none; background: var(--primary); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        /* --- Container --- */
+        .container {
+            width: 92%; max-width: 480px; background: var(--card);
+            backdrop-filter: blur(20px); border-radius: 35px; padding: 30px;
+            border: 1px solid rgba(128,128,128,0.2); box-shadow: 0 40px 100px rgba(0,0,0,0.2);
+            position: relative; margin: 20px 0;
+        }
 
-        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1px solid rgba(128,128,128,0.2); background: var(--input); color: var(--text); outline: none; font-family: 'Cairo'; }
-        .btn-action { width: 100%; padding: 15px; border-radius: 15px; border: none; color: white; font-weight: 700; cursor: pointer; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px; }
-        
-        #custom-alert { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-150%); background: var(--primary); color: white; padding: 12px 25px; border-radius: 15px; z-index: 10000; transition: 0.5s; }
+        /* --- Header Controls --- */
+        .header-btns {
+            position: absolute; top: 25px; left: 25px; right: 25px;
+            display: flex; justify-content: space-between;
+        }
+        .icon-btn {
+            width: 42px; height: 42px; border-radius: 14px; border: none;
+            background: var(--primary); color: white; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+        }
+
+        /* --- Elements --- */
+        h1, h2, h3 { margin: 10px 0; font-weight: 900; }
+        input, select, textarea {
+            width: 100%; padding: 14px; margin: 10px 0; border-radius: 15px;
+            border: 1px solid rgba(128,128,128,0.2); background: var(--input);
+            color: var(--text); outline: none; font-family: 'Cairo';
+        }
+        .btn-action {
+            width: 100%; padding: 16px; border-radius: 18px; border: none;
+            color: white; font-weight: 700; cursor: pointer;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .btn-action:active { transform: scale(0.98); }
+
+        /* --- Search & History --- */
+        .history-section {
+            margin-top: 25px; background: rgba(0,0,0,0.1); border-radius: 20px; padding: 15px;
+        }
+        #history-list { max-height: 180px; overflow-y: auto; margin-top: 10px; }
+        .history-item {
+            display: flex; justify-content: space-between; padding: 12px;
+            border-bottom: 1px solid rgba(128,128,128,0.1); font-size: 0.9rem;
+        }
+
+        /* --- Custom Alert --- */
+        #custom-alert {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-120%);
+            background: var(--primary); color: white; padding: 15px 30px; border-radius: 20px;
+            z-index: 10000; box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
         #custom-alert.show { transform: translateX(-50%) translateY(0); }
 
-        .hidden { display: none !important; }
+        /* --- Helpers --- */
+        .hidden { display: none; }
         .screen { animation: screenIn 0.5s ease; text-align: center; }
-        @keyframes screenIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .report-card { background: white; color: #1e293b; padding: 20px; border-radius: 20px; text-align: right; border: 2px solid var(--primary); }
+        @keyframes screenIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .report-box { background: white; color: #1e293b; padding: 25px; border-radius: 25px; text-align: right; }
     </style>
 </head>
 <body>
 
-<div id="custom-alert"></div>
+<div id="custom-alert">رسالة التنبيه</div>
 
 <div id="splash-screen">
-    <div style="font-size: 5rem; color: var(--primary);"><i class="fas fa-graduation-cap"></i></div>
-    <h2 style="color:white; margin-top:10px;">SPT <span style="color:var(--primary)">LEARN</span></h2>
+    <div class="splash-logo"><i class="fas fa-graduation-cap"></i></div>
+    <h2 style="color:white">SPT <span style="color:var(--primary)">LEARN</span></h2>
 </div>
 
 <div class="container">
@@ -57,74 +116,71 @@
     </div>
 
     <div id="main-menu" class="screen">
-        <br><br><div style="font-size: 3.5rem; color: var(--primary);"><i class="fas fa-graduation-cap"></i></div>
+        <br><br>
+        <div style="font-size: 4rem; color: var(--primary);"><i class="fas fa-graduation-cap"></i></div>
         <h1>SPT <span style="color:var(--primary)">LEARN</span></h1>
-        <p style="opacity: 0.7">نظام الإدارة التعليمية المتطور</p>
-        <div style="margin-top: 25px; display: grid; gap: 10px;">
-            <button class="btn-action" onclick="openAuth('teacher')">بوابة المعلم</button>
-            <button class="btn-action" style="background:#334155" onclick="openAuth('parent')">بوابة ولي الأمر</button>
-            <button class="btn-action" style="background:none; border:1px solid var(--primary)" onclick="shareApp()">مشاركة المنصة</button>
+        <p style="opacity: 0.7">منصة المتابعة التعليمية الأذكى</p>
+        <div style="margin-top: 30px; display: grid; gap: 12px;">
+            <button class="btn-action" onclick="openAuth('teacher')">لوحة المعلمين</button>
+            <button class="btn-action" style="background:#334155" onclick="openAuth('parent')">بوابة الطالب</button>
+            <button class="btn-action" style="background:none; border:1px solid var(--primary)" onclick="shareApp()">مشاركة التطبيق</button>
         </div>
     </div>
 
     <div id="profile-screen" class="screen hidden">
-        <br><br><h3>بيانات الحساب</h3>
-        <div style="background:var(--primary); padding:20px; border-radius:20px; color:white; margin:15px 0; text-align: right; font-size: 0.9rem;">
-            <p><i class="fas fa-user"></i> <b>ولي الأمر:</b> <span id="u-name"></span></p>
-            <p><i class="fas fa-child"></i> <b>الطالب المرتبط:</b> <span id="u-student"></span></p>
-            <p><i class="fas fa-envelope"></i> <b>البريد:</b> <span id="u-email"></span></p>
-            <p><i class="fas fa-phone"></i> <b>الهاتف:</b> <span id="u-phone"></span></p>
+        <br><br><h3>الملف الشخصي</h3>
+        <div style="background:var(--primary); padding:25px; border-radius:25px; color:white; margin:20px 0">
+            <i class="fas fa-user-circle fa-4x"></i>
+            <h2 id="u-name">...</h2>
+            <p id="u-email" style="opacity: 0.8"></p>
         </div>
         <button class="btn-action" style="background:var(--danger)" onclick="handleLogout()">تسجيل الخروج</button>
-        <button class="btn-action" style="background:none; color:var(--text)" onclick="backToDash()">رجوع</button>
+        <button class="btn-action" style="background:none; color:var(--text)" onclick="backToDash()">العودة للوحة</button>
     </div>
 
     <div id="teacher-dash" class="screen hidden">
-        <br><br><h3>إضافة تقرير طالب</h3>
-        <input type="text" id="s-name" placeholder="اسم الطالب الثلاثي">
-        <input type="text" id="p-name" placeholder="اسم ولي الأمر">
+        <br><br><h3>إضافة تقرير جديد</h3>
+        <input type="text" id="s-name" placeholder="اسم الطالب">
         <select id="s-grade">
             <option>ممتاز جداً ⭐⭐⭐⭐⭐</option>
             <option>جيد جداً ⭐⭐⭐⭐</option>
             <option>جيد ⭐⭐⭐</option>
         </select>
         <textarea id="s-note" rows="2" placeholder="ملاحظات المعلم..."></textarea>
-        <button class="btn-action" onclick="saveReport()"><i class="fas fa-save"></i> حفظ التقرير</button>
-        <div id="history-list" style="margin-top:20px; max-height:100px; overflow-y:auto; font-size:0.8rem"></div>
+        <button class="btn-action" onclick="saveReport()"><i class="fas fa-save"></i> حفظ وإرسال</button>
+        
+        <div class="history-section">
+            <input type="text" id="search-bar" placeholder="🔍 ابحث بالاسم أو الكود..." oninput="filterData()">
+            <div id="history-list"></div>
+        </div>
     </div>
 
     <div id="parent-dash" class="screen hidden">
-        <br><br><h3>استعلام النتائج</h3>
-        <input type="text" id="search-code" placeholder="أدخل كود الطالب">
-        <button class="btn-action" onclick="getReport()">بحث</button>
+        <br><br><h3>عرض النتائج</h3>
+        <input type="text" id="search-code" placeholder="أدخل كود الطالب (مثال: SPT-1234)">
+        <button class="btn-action" onclick="getReport()">بحث عن التقرير</button>
         <div id="report-view" class="hidden">
-            <div id="capture-area" style="margin-top:15px">
-                <div class="report-card">
-                    <h3 id="v-name" style="margin:0; color:var(--primary)"></h3>
-                    <p>ولي الأمر: <b id="v-parent"></b></p>
-                    <hr style="opacity:0.1">
-                    <p>التقييم: <b id="v-grade"></b></p>
-                    <p>الملاحظات: <span id="v-note"></span></p>
+            <div id="capture-area" style="margin-top:20px">
+                <div class="report-box">
+                    <h2 id="v-name" style="margin:0"></h2>
+                    <hr style="opacity:0.1; margin:15px 0">
+                    <p>التقييم: <b id="v-grade" style="color:var(--primary)"></b></p>
+                    <p>ملاحظة: <span id="v-note"></span></p>
                     <small style="opacity:0.5" id="v-date"></small>
                 </div>
             </div>
-            <button class="btn-action" style="background:#475569" onclick="downloadImg()">تحميل كصورة</button>
+            <button class="btn-action" style="background:#475569; margin-top:10px" onclick="downloadImg()"><i class="fas fa-image"></i> حفظ كصورة</button>
         </div>
         <button class="btn-action" style="background:none; margin-top:15px; color:var(--text)" onclick="handleLogout()">خروج</button>
     </div>
 
     <div id="auth-screen" class="screen hidden">
         <br><br><h3 id="auth-title">دخول</h3>
-        <div id="signup-fields" class="hidden">
-            <input type="text" id="reg-fullname" placeholder="الاسم الثلاثي لولي الأمر">
-            <input type="text" id="reg-studentname" placeholder="اسم الطالب الثلاثي">
-            <input type="tel" id="reg-phone" placeholder="رقم هاتف التواصل">
-        </div>
         <input type="email" id="auth-email" placeholder="البريد الإلكتروني">
         <input type="password" id="auth-pass" placeholder="كلمة المرور">
         <button class="btn-action" onclick="handleAuth()">تأكيد</button>
-        <p id="auth-toggle" onclick="toggleAuthMode()" style="cursor:pointer; font-size: 0.8rem; margin-top:15px;"></p>
-        <button class="btn-action" style="background:none; color:var(--text)" onclick="showScreen('main-menu')">رجوع</button>
+        <p id="auth-toggle" onclick="toggleAuthMode()" style="cursor:pointer; font-size: 0.9rem"></p>
+        <button class="btn-action" style="background:none; color:var(--text)" onclick="showScreen('main-menu')">إلغاء</button>
     </div>
 </div>
 
@@ -147,44 +203,59 @@
     const db = getDatabase(app);
     const auth = getAuth(app);
 
+    // --- Core Logic ---
     let authMode = "login";
-    let userRole = localStorage.getItem('userRole') || "";
+    let userRole = "";
+    let historyData = [];
 
-    window.addEventListener('load', () => { setTimeout(() => document.getElementById('splash-screen').classList.add('fade-out'), 2000); });
-    window.toggleTheme = () => { document.body.classList.toggle('light-mode'); };
-    window.showAlert = (msg) => { const a = document.getElementById('custom-alert'); a.innerText = msg; a.classList.add('show'); setTimeout(() => a.classList.remove('show'), 3000); };
-    window.showScreen = (id) => { document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); };
+    window.addEventListener('load', () => {
+        setTimeout(() => document.getElementById('splash-screen').classList.add('fade-out'), 2500);
+    });
 
-    window.openAuth = (role) => { userRole = role; localStorage.setItem('userRole', role); authMode = "login"; updateAuthUI(); showScreen('auth-screen'); };
-    
-    function updateAuthUI() { 
-        document.getElementById('auth-title').innerText = authMode === 'login' ? 'تسجيل الدخول' : 'حساب جديد';
-        document.getElementById('auth-toggle').innerText = authMode === 'login' ? 'ليس لديك حساب؟ سجل هنا' : 'لديك حساب؟ ادخل من هنا';
-        authMode === 'signup' ? document.getElementById('signup-fields').classList.remove('hidden') : document.getElementById('signup-fields').classList.add('hidden');
+    window.toggleTheme = () => {
+        document.body.classList.toggle('light-mode');
+        document.getElementById('theme-icon').className = document.body.classList.contains('light-mode') ? 'fas fa-sun' : 'fas fa-moon';
+    };
+
+    window.showAlert = (msg) => {
+        const a = document.getElementById('custom-alert');
+        a.innerText = msg; a.classList.add('show');
+        setTimeout(() => a.classList.remove('show'), 3000);
+    };
+
+    window.showScreen = (id) => {
+        document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+    };
+
+    window.openAuth = (role) => {
+        userRole = role; authMode = "login";
+        updateAuthUI();
+        showScreen('auth-screen');
+    };
+
+    function updateAuthUI() {
+        document.getElementById('auth-title').innerText = authMode === 'login' ? 'تسجيل الدخول' : 'إنشاء حساب جديد';
+        document.getElementById('auth-toggle').innerText = authMode === 'login' ? 'ليس لديك حساب؟ سجل هنا' : 'لديك حساب بالفعل؟ ادخل هنا';
     }
 
     window.toggleAuthMode = () => { authMode = (authMode === 'login' ? 'signup' : 'login'); updateAuthUI(); };
 
     window.handleAuth = () => {
-        const e = document.getElementById('auth-email').value;
-        const p = document.getElementById('auth-pass').value;
+        const email = document.getElementById('auth-email').value;
+        const pass = document.getElementById('auth-pass').value;
         if(authMode === 'signup') {
-            const name = document.getElementById('reg-fullname').value;
-            const sname = document.getElementById('reg-studentname').value;
-            const phone = document.getElementById('reg-phone').value;
-            if(!name || !sname || !phone) return showAlert("يرجى إكمال كافة البيانات");
-            
-            createUserWithEmailAndPassword(auth, e, p).then((res) => {
+            const name = prompt("ما هو اسمك الكامل؟");
+            createUserWithEmailAndPassword(auth, email, pass).then((res) => {
                 updateProfile(res.user, { displayName: name });
-                set(ref(db, 'users/' + res.user.uid), { phone: phone, student: sname, role: userRole });
                 sendEmailVerification(res.user);
-                showAlert("تم! فعل حسابك من الإيميل");
+                showAlert("تم الإنشاء! فعل حسابك من الإيميل");
                 authMode = "login"; updateAuthUI();
-            }).catch(() => showAlert("خطأ في البيانات"));
+            }).catch(e => showAlert("خطأ في التسجيل"));
         } else {
-            signInWithEmailAndPassword(auth, e, p).then((res) => {
-                if(!res.user.emailVerified) { showAlert("فعل حسابك أولاً"); signOut(auth); }
-            }).catch(() => showAlert("خطأ في تسجيل الدخول"));
+            signInWithEmailAndPassword(auth, email, pass).then((res) => {
+                if(!res.user.emailVerified) { showAlert("يرجى تفعيل الإيميل أولاً"); signOut(auth); }
+            }).catch(() => showAlert("بيانات الدخول خاطئة"));
         }
     };
 
@@ -193,53 +264,75 @@
             document.getElementById('prof-btn').style.display = "flex";
             document.getElementById('u-name').innerText = user.displayName;
             document.getElementById('u-email').innerText = user.email;
-            get(child(ref(db), 'users/' + user.uid)).then(s => { 
-                if(s.exists()){
-                    document.getElementById('u-phone').innerText = s.val().phone;
-                    document.getElementById('u-student').innerText = s.val().student;
-                }
-            });
-            userRole === 'teacher' ? showScreen('teacher-dash') : showScreen('parent-dash');
+            userRole === 'teacher' ? (showScreen('teacher-dash'), loadHistory()) : showScreen('parent-dash');
         } else {
             document.getElementById('prof-btn').style.display = "none";
             showScreen('main-menu');
         }
     });
 
-    window.handleLogout = () => { localStorage.removeItem('userRole'); signOut(auth); };
+    window.handleLogout = () => signOut(auth);
     window.backToDash = () => userRole === 'teacher' ? showScreen('teacher-dash') : showScreen('parent-dash');
 
+    // --- Teacher Logic ---
     window.saveReport = () => {
-        const n = document.getElementById('s-name').value;
-        const pn = document.getElementById('p-name').value;
-        const c = 'SPT-' + Math.floor(1000 + Math.random() * 9000);
-        if(!n || !pn) return showAlert("أكمل البيانات");
-        set(ref(db, 'students/' + c), { 
-            name: n, parent: pn, grade: document.getElementById('s-grade').value, 
-            note: document.getElementById('s-note').value, date: new Date().toLocaleDateString('ar-EG') 
-        }).then(() => { 
-            showAlert("تم الحفظ! الكود: " + c); 
-            document.getElementById('s-name').value = ""; document.getElementById('p-name').value = "";
+        const name = document.getElementById('s-name').value;
+        const code = 'SPT-' + Math.floor(1000 + Math.random() * 9000);
+        if(!name) return showAlert("أدخل اسم الطالب");
+        set(ref(db, 'students/' + code), {
+            name, grade: document.getElementById('s-grade').value,
+            note: document.getElementById('s-note').value,
+            date: new Date().toLocaleDateString('ar-EG')
+        }).then(() => { showAlert("تم الحفظ! كود الطالب: " + code); loadHistory(); });
+    };
+
+    window.loadHistory = () => {
+        get(child(ref(db), 'students')).then(s => {
+            if(s.exists()) {
+                historyData = Object.entries(s.val()).reverse();
+                renderHistory(historyData);
+            }
         });
     };
 
+    function renderHistory(data) {
+        const list = document.getElementById('history-list');
+        list.innerHTML = data.map(([code, d]) => `
+            <div class="history-item"><span>${d.name}</span><b>${code}</b></div>
+        `).join('');
+    }
+
+    window.filterData = () => {
+        const term = document.getElementById('search-bar').value.toLowerCase();
+        const filtered = historyData.filter(([code, d]) => d.name.toLowerCase().includes(term) || code.toLowerCase().includes(term));
+        renderHistory(filtered);
+    };
+
+    // --- Parent Logic ---
     window.getReport = () => {
-        const c = document.getElementById('search-code').value.trim();
-        get(child(ref(db), 'students/' + c)).then(s => {
+        const code = document.getElementById('search-code').value.trim();
+        get(child(ref(db), 'students/' + code)).then(s => {
             if(s.exists()) {
                 const d = s.val();
                 document.getElementById('v-name').innerText = d.name;
-                document.getElementById('v-parent').innerText = d.parent;
                 document.getElementById('v-grade').innerText = d.grade;
                 document.getElementById('v-note').innerText = d.note;
                 document.getElementById('v-date').innerText = d.date;
                 document.getElementById('report-view').classList.remove('hidden');
-            } else { showAlert("الكود غير موجود"); }
+            } else { showAlert("الكود غير صحيح"); }
         });
     };
 
-    window.downloadImg = () => html2canvas(document.getElementById('capture-area')).then(c => { const a = document.createElement('a'); a.download = 'report.png'; a.href = c.toDataURL(); a.click(); });
-    window.shareApp = () => navigator.share ? navigator.share({ title: 'SPT LEARN', url: window.location.href }) : alert("انسخ الرابط");
+    window.downloadImg = () => {
+        html2canvas(document.getElementById('capture-area')).then(c => {
+            const a = document.createElement('a'); a.download = 'report.png'; a.href = c.toDataURL(); a.click();
+        });
+    };
+
+    window.shareApp = () => {
+        if(navigator.share) navigator.share({ title: 'SPT LEARN', url: window.location.href });
+        else showAlert("انسخ الرابط وشاركه يدوياً");
+    };
 </script>
 </body>
 </html>
