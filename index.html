@@ -10,183 +10,164 @@
     
     <style>
         :root {
-            --primary: #6366f1; --secondary: #8b5cf6;
-            --bg: #0f172a; --card: rgba(255, 255, 255, 0.05);
-            --text: #ffffff; --input: rgba(0,0,0,0.3);
-            --danger: #ef4444; --success: #10b981;
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --danger: #ef4444;
+            --success: #10b981;
+            --bg-dark: #0f172a;
         }
 
-        .light-mode {
-            --bg: #f1f5f9; --card: rgba(255, 255, 255, 0.9);
-            --text: #1e293b; --input: #ffffff;
-        }
-
-        * { box-sizing: border-box; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-
-        body {
-            margin: 0; font-family: 'Cairo', sans-serif;
-            background: var(--bg); color: var(--text);
-            min-height: 100vh; display: flex; justify-content: center; align-items: center;
-            overflow-x: hidden;
-        }
-
-        /* --- Splash Screen --- */
+        /* --- شاشة الموشن (Splash) --- */
         #splash-screen {
-            position: fixed; inset: 0; background: #0f172a;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 9999;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-dark); display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 9999;
+            transition: 0.8s;
         }
         .splash-logo { font-size: 5rem; color: var(--primary); animation: pulse 2s infinite; }
         .fade-out { opacity: 0; visibility: hidden; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px var(--primary)); } 50% { transform: scale(1.1); filter: drop-shadow(0 0 25px var(--secondary)); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px var(--primary)); } 50% { transform: scale(1.1); filter: drop-shadow(0 0 30px var(--secondary)); } }
 
-        /* --- Container --- */
-        .container {
-            width: 92%; max-width: 480px; background: var(--card);
-            backdrop-filter: blur(20px); border-radius: 35px; padding: 30px;
-            border: 1px solid rgba(128,128,128,0.2); box-shadow: 0 40px 100px rgba(0,0,0,0.2);
-            position: relative; margin: 20px 0;
-        }
-
-        /* --- Header Controls --- */
-        .header-btns {
-            position: absolute; top: 25px; left: 25px; right: 25px;
-            display: flex; justify-content: space-between;
-        }
-        .icon-btn {
-            width: 42px; height: 42px; border-radius: 14px; border: none;
-            background: var(--primary); color: white; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
-        }
-
-        /* --- Elements --- */
-        h1, h2, h3 { margin: 10px 0; font-weight: 900; }
-        input, select, textarea {
-            width: 100%; padding: 14px; margin: 10px 0; border-radius: 15px;
-            border: 1px solid rgba(128,128,128,0.2); background: var(--input);
-            color: var(--text); outline: none; font-family: 'Cairo';
-        }
-        .btn-action {
-            width: 100%; padding: 16px; border-radius: 18px; border: none;
-            color: white; font-weight: 700; cursor: pointer;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        .btn-action:active { transform: scale(0.98); }
-
-        /* --- Search & History --- */
-        .history-section {
-            margin-top: 25px; background: rgba(0,0,0,0.1); border-radius: 20px; padding: 15px;
-        }
-        #history-list { max-height: 180px; overflow-y: auto; margin-top: 10px; }
-        .history-item {
-            display: flex; justify-content: space-between; padding: 12px;
-            border-bottom: 1px solid rgba(128,128,128,0.1); font-size: 0.9rem;
-        }
-
-        /* --- Custom Alert --- */
+        /* --- التنبيه العصري --- */
         #custom-alert {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-120%);
-            background: var(--primary); color: white; padding: 15px 30px; border-radius: 20px;
-            z-index: 10000; box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px);
+            padding: 15px 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
+            color: white; z-index: 10000; display: flex; align-items: center; gap: 10px;
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         #custom-alert.show { transform: translateX(-50%) translateY(0); }
 
-        /* --- Helpers --- */
+        /* --- الستايل العام --- */
+        * { box-sizing: border-box; transition: 0.3s; }
+        body {
+            margin: 0; font-family: 'Cairo', sans-serif;
+            background: linear-gradient(-45deg, #0f172a, #1e293b, #312e81, #581c87);
+            background-size: 400% 400%; animation: gradientBG 15s ease infinite;
+            color: white; min-height: 100vh; display: flex; justify-content: center; align-items: center;
+        }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        .container {
+            width: 92%; max-width: 480px; background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px); border-radius: 35px; padding: 30px;
+            border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+        }
+
+        .btn-action {
+            width: 100%; padding: 15px; border-radius: 18px; border: none;
+            color: white; font-weight: 700; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; gap: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); margin-top: 10px;
+        }
+        .btn-action:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3); }
+
+        input, select, textarea {
+            width: 100%; padding: 14px; margin: 8px 0; border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3);
+            color: white; outline: none; font-family: 'Cairo';
+        }
+
+        /* سجل التقارير */
+        .history-list {
+            margin-top: 20px; max-height: 200px; overflow-y: auto;
+            background: rgba(0,0,0,0.2); border-radius: 15px; padding: 10px;
+        }
+        .history-item {
+            display: flex; justify-content: space-between; padding: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem;
+        }
+
         .hidden { display: none; }
-        .screen { animation: screenIn 0.5s ease; text-align: center; }
-        @keyframes screenIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .screen { animation: fadeIn 0.5s ease; text-align: center; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         
-        .report-box { background: white; color: #1e293b; padding: 25px; border-radius: 25px; text-align: right; }
+        .report-card { background: white; color: #1e293b; padding: 25px; border-radius: 20px; text-align: right; }
     </style>
 </head>
 <body>
 
-<div id="custom-alert">رسالة التنبيه</div>
+<div id="custom-alert"><i class="fas fa-bell"></i> <span id="alert-text"></span></div>
 
 <div id="splash-screen">
     <div class="splash-logo"><i class="fas fa-graduation-cap"></i></div>
-    <h2 style="color:white">SPT <span style="color:var(--primary)">LEARN</span></h2>
+    <h2 style="letter-spacing: 2px;">SPT <span style="color:var(--primary)">LEARN</span></h2>
 </div>
 
 <div class="container">
-    <div class="header-btns">
-        <button class="icon-btn" onclick="toggleTheme()"><i class="fas fa-moon" id="theme-icon"></i></button>
-        <button class="icon-btn" id="prof-btn" style="display:none" onclick="showScreen('profile-screen')"><i class="fas fa-user"></i></button>
-    </div>
-
     <div id="main-menu" class="screen">
-        <br><br>
-        <div style="font-size: 4rem; color: var(--primary);"><i class="fas fa-graduation-cap"></i></div>
+        <div style="font-size: 3.5rem; color: var(--primary);"><i class="fas fa-graduation-cap"></i></div>
         <h1>SPT <span style="color:var(--primary)">LEARN</span></h1>
-        <p style="opacity: 0.7">منصة المتابعة التعليمية الأذكى</p>
+        <p style="opacity: 0.7">المنصة التعليمية الذكية لجيل المستقبل</p>
         <div style="margin-top: 30px; display: grid; gap: 12px;">
-            <button class="btn-action" onclick="openAuth('teacher')">لوحة المعلمين</button>
-            <button class="btn-action" style="background:#334155" onclick="openAuth('parent')">بوابة الطالب</button>
-            <button class="btn-action" style="background:none; border:1px solid var(--primary)" onclick="shareApp()">مشاركة التطبيق</button>
+            <button class="btn-action" onclick="openAuth('teacher')">دخول المعلمين</button>
+            <button class="btn-action" style="background: #334155" onclick="openAuth('parent')">بوابة ولي الأمر والطالب</button>
+            <button class="btn-action" style="background: none; border: 1px solid var(--primary)" onclick="shareApp()">
+                <i class="fas fa-share-nodes"></i> مشاركة التطبيق
+            </button>
         </div>
     </div>
 
-    <div id="profile-screen" class="screen hidden">
-        <br><br><h3>الملف الشخصي</h3>
-        <div style="background:var(--primary); padding:25px; border-radius:25px; color:white; margin:20px 0">
-            <i class="fas fa-user-circle fa-4x"></i>
-            <h2 id="u-name">...</h2>
-            <p id="u-email" style="opacity: 0.8"></p>
-        </div>
-        <button class="btn-action" style="background:var(--danger)" onclick="handleLogout()">تسجيل الخروج</button>
-        <button class="btn-action" style="background:none; color:var(--text)" onclick="backToDash()">العودة للوحة</button>
+    <div id="login-screen" class="screen hidden">
+        <h3 id="login-title">تسجيل الدخول</h3>
+        <input type="email" id="login-email" placeholder="البريد الإلكتروني">
+        <input type="password" id="login-pass" placeholder="كلمة المرور">
+        <button class="btn-action" onclick="handleLogin()">دخول</button>
+        <p style="font-size: 0.8rem">ليس لديك حساب؟ <span style="color:var(--primary); cursor:pointer" onclick="showScreen('signup-screen')">سجل الآن</span></p>
+        <button class="btn-action" style="background:none" onclick="showScreen('main-menu')">رجوع</button>
+    </div>
+
+    <div id="signup-screen" class="screen hidden">
+        <h3>حساب جديد</h3>
+        <input type="text" id="reg-name" placeholder="الاسم الكامل">
+        <input type="email" id="reg-email" placeholder="الإيميل">
+        <input type="password" id="reg-pass" placeholder="كلمة المرور">
+        <button class="btn-action" onclick="handleSignUp()">تفعيل الحساب</button>
+        <button class="btn-action" style="background:none" onclick="showScreen('login-screen')">رجوع</button>
     </div>
 
     <div id="teacher-dash" class="screen hidden">
-        <br><br><h3>إضافة تقرير جديد</h3>
+        <div id="t-user" style="font-size: 0.8rem; opacity: 0.6; margin-bottom: 10px;"></div>
+        <h3>إضافة تقرير</h3>
         <input type="text" id="s-name" placeholder="اسم الطالب">
         <select id="s-grade">
-            <option>ممتاز جداً ⭐⭐⭐⭐⭐</option>
-            <option>جيد جداً ⭐⭐⭐⭐</option>
-            <option>جيد ⭐⭐⭐</option>
+            <option value="ممتاز جداً ⭐⭐⭐⭐⭐">ممتاز جداً ⭐⭐⭐⭐⭐</option>
+            <option value="جيد جداً ⭐⭐⭐⭐">جيد جداً ⭐⭐⭐⭐</option>
+            <option value="جيد ⭐⭐⭐">جيد ⭐⭐⭐</option>
         </select>
-        <textarea id="s-note" rows="2" placeholder="ملاحظات المعلم..."></textarea>
-        <button class="btn-action" onclick="saveReport()"><i class="fas fa-save"></i> حفظ وإرسال</button>
+        <textarea id="s-note" rows="2" placeholder="ملاحظاتك..."></textarea>
+        <button class="btn-action" onclick="saveReport()"><i class="fas fa-plus"></i> حفظ التقرير</button>
         
-        <div class="history-section">
-            <input type="text" id="search-bar" placeholder="🔍 ابحث بالاسم أو الكود..." oninput="filterData()">
-            <div id="history-list"></div>
+        <div style="margin-top: 20px; text-align: right;">
+            <small><i class="fas fa-history"></i> آخر الطلاب المضافين:</small>
+            <div id="history-list" class="history-list"></div>
         </div>
+        
+        <button class="btn-action" style="background:var(--danger); margin-top:20px" onclick="handleLogout()">خروج</button>
     </div>
 
     <div id="parent-dash" class="screen hidden">
-        <br><br><h3>عرض النتائج</h3>
-        <input type="text" id="search-code" placeholder="أدخل كود الطالب (مثال: SPT-1234)">
-        <button class="btn-action" onclick="getReport()">بحث عن التقرير</button>
-        <div id="report-view" class="hidden">
+        <h3>استعلام سريع</h3>
+        <input type="text" id="search-code" placeholder="أدخل كود الطالب">
+        <button class="btn-action" onclick="getReport()">عرض التقرير</button>
+        <div id="report-display" class="hidden">
             <div id="capture-area" style="margin-top:20px">
-                <div class="report-box">
-                    <h2 id="v-name" style="margin:0"></h2>
-                    <hr style="opacity:0.1; margin:15px 0">
-                    <p>التقييم: <b id="v-grade" style="color:var(--primary)"></b></p>
-                    <p>ملاحظة: <span id="v-note"></span></p>
-                    <small style="opacity:0.5" id="v-date"></small>
+                <div class="report-card">
+                    <h2 id="view-name"></h2>
+                    <p>التقييم: <strong id="view-grade" style="color:var(--primary)"></strong></p>
+                    <p id="view-note" style="background:#f1f5f9; padding:10px; border-radius:10px"></p>
+                    <small id="view-date" style="opacity: 0.5"></small>
                 </div>
             </div>
-            <button class="btn-action" style="background:#475569; margin-top:10px" onclick="downloadImg()"><i class="fas fa-image"></i> حفظ كصورة</button>
+            <button class="btn-action" style="background:#475569" onclick="downloadImage()"><i class="fas fa-download"></i> تحميل كصورة</button>
         </div>
-        <button class="btn-action" style="background:none; margin-top:15px; color:var(--text)" onclick="handleLogout()">خروج</button>
-    </div>
-
-    <div id="auth-screen" class="screen hidden">
-        <br><br><h3 id="auth-title">دخول</h3>
-        <input type="email" id="auth-email" placeholder="البريد الإلكتروني">
-        <input type="password" id="auth-pass" placeholder="كلمة المرور">
-        <button class="btn-action" onclick="handleAuth()">تأكيد</button>
-        <p id="auth-toggle" onclick="toggleAuthMode()" style="cursor:pointer; font-size: 0.9rem"></p>
-        <button class="btn-action" style="background:none; color:var(--text)" onclick="showScreen('main-menu')">إلغاء</button>
+        <button class="btn-action" style="background:none; margin-top:20px" onclick="handleLogout()">خروج</button>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+    import { getDatabase, ref, set, get, child, push } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
     const firebaseConfig = {
@@ -203,127 +184,94 @@
     const db = getDatabase(app);
     const auth = getAuth(app);
 
-    // --- Core Logic ---
-    let authMode = "login";
-    let userRole = "";
-    let historyData = [];
+    window.showAlert = (text) => {
+        const b = document.getElementById('custom-alert');
+        document.getElementById('alert-text').innerText = text;
+        b.classList.add('show');
+        setTimeout(() => b.classList.remove('show'), 3000);
+    };
 
     window.addEventListener('load', () => {
         setTimeout(() => document.getElementById('splash-screen').classList.add('fade-out'), 2500);
     });
 
-    window.toggleTheme = () => {
-        document.body.classList.toggle('light-mode');
-        document.getElementById('theme-icon').className = document.body.classList.contains('light-mode') ? 'fas fa-sun' : 'fas fa-moon';
-    };
-
-    window.showAlert = (msg) => {
-        const a = document.getElementById('custom-alert');
-        a.innerText = msg; a.classList.add('show');
-        setTimeout(() => a.classList.remove('show'), 3000);
-    };
-
+    let role = "";
     window.showScreen = (id) => {
         document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
     };
 
-    window.openAuth = (role) => {
-        userRole = role; authMode = "login";
-        updateAuthUI();
-        showScreen('auth-screen');
+    window.openAuth = (r) => { role = r; showScreen('login-screen'); };
+
+    window.handleSignUp = () => {
+        const n = document.getElementById('reg-name').value;
+        const e = document.getElementById('reg-email').value;
+        const p = document.getElementById('reg-pass').value;
+        createUserWithEmailAndPassword(auth, e, p).then((u) => {
+            updateProfile(u.user, { displayName: n });
+            sendEmailVerification(u.user);
+            showAlert("تم! فعل حسابك من الإيميل");
+            showScreen('login-screen');
+        }).catch(() => showAlert("خطأ في البيانات"));
     };
 
-    function updateAuthUI() {
-        document.getElementById('auth-title').innerText = authMode === 'login' ? 'تسجيل الدخول' : 'إنشاء حساب جديد';
-        document.getElementById('auth-toggle').innerText = authMode === 'login' ? 'ليس لديك حساب؟ سجل هنا' : 'لديك حساب بالفعل؟ ادخل هنا';
-    }
-
-    window.toggleAuthMode = () => { authMode = (authMode === 'login' ? 'signup' : 'login'); updateAuthUI(); };
-
-    window.handleAuth = () => {
-        const email = document.getElementById('auth-email').value;
-        const pass = document.getElementById('auth-pass').value;
-        if(authMode === 'signup') {
-            const name = prompt("ما هو اسمك الكامل؟");
-            createUserWithEmailAndPassword(auth, email, pass).then((res) => {
-                updateProfile(res.user, { displayName: name });
-                sendEmailVerification(res.user);
-                showAlert("تم الإنشاء! فعل حسابك من الإيميل");
-                authMode = "login"; updateAuthUI();
-            }).catch(e => showAlert("خطأ في التسجيل"));
-        } else {
-            signInWithEmailAndPassword(auth, email, pass).then((res) => {
-                if(!res.user.emailVerified) { showAlert("يرجى تفعيل الإيميل أولاً"); signOut(auth); }
-            }).catch(() => showAlert("بيانات الدخول خاطئة"));
-        }
+    window.handleLogin = () => {
+        const e = document.getElementById('login-email').value;
+        const p = document.getElementById('login-pass').value;
+        signInWithEmailAndPassword(auth, e, p).then((u) => {
+            if(!u.user.emailVerified) { showAlert("فعل إيميلك أولاً"); signOut(auth); }
+        }).catch(() => showAlert("بيانات خاطئة"));
     };
 
-    onAuthStateChanged(auth, (user) => {
-        if(user && user.emailVerified) {
-            document.getElementById('prof-btn').style.display = "flex";
-            document.getElementById('u-name').innerText = user.displayName;
-            document.getElementById('u-email').innerText = user.email;
-            userRole === 'teacher' ? (showScreen('teacher-dash'), loadHistory()) : showScreen('parent-dash');
-        } else {
-            document.getElementById('prof-btn').style.display = "none";
-            showScreen('main-menu');
-        }
+    onAuthStateChanged(auth, (u) => {
+        if(u && u.emailVerified) {
+            role === 'teacher' ? (showScreen('teacher-dash'), loadHistory()) : showScreen('parent-dash');
+            if(role === 'teacher') document.getElementById('t-user').innerText = u.displayName;
+        } else { showScreen('main-menu'); }
     });
 
     window.handleLogout = () => signOut(auth);
-    window.backToDash = () => userRole === 'teacher' ? showScreen('teacher-dash') : showScreen('parent-dash');
 
-    // --- Teacher Logic ---
     window.saveReport = () => {
-        const name = document.getElementById('s-name').value;
-        const code = 'SPT-' + Math.floor(1000 + Math.random() * 9000);
-        if(!name) return showAlert("أدخل اسم الطالب");
-        set(ref(db, 'students/' + code), {
-            name, grade: document.getElementById('s-grade').value,
-            note: document.getElementById('s-note').value,
-            date: new Date().toLocaleDateString('ar-EG')
-        }).then(() => { showAlert("تم الحفظ! كود الطالب: " + code); loadHistory(); });
+        const n = document.getElementById('s-name').value;
+        const g = document.getElementById('s-grade').value;
+        const m = document.getElementById('s-note').value;
+        const c = 'SPT-' + Math.floor(1000 + Math.random() * 9000);
+        if(!n) return showAlert("أدخل الاسم");
+        set(ref(db, 'students/' + c), { name: n, grade: g, note: m, date: new Date().toLocaleDateString('ar-EG') }).then(() => {
+            showAlert("تم الحفظ بنجاح");
+            loadHistory();
+            document.getElementById('s-name').value = "";
+        });
     };
 
     window.loadHistory = () => {
-        get(child(ref(db), 'students')).then(s => {
-            if(s.exists()) {
-                historyData = Object.entries(s.val()).reverse();
-                renderHistory(historyData);
+        get(child(ref(db), 'students')).then((s) => {
+            const list = document.getElementById('history-list');
+            list.innerHTML = "";
+            if(s.exists()){
+                Object.entries(s.val()).reverse().slice(0, 5).forEach(([code, data]) => {
+                    list.innerHTML += `<div class="history-item"><span>${data.name}</span> <b style="color:var(--primary)">${code}</b></div>`;
+                });
             }
         });
     };
 
-    function renderHistory(data) {
-        const list = document.getElementById('history-list');
-        list.innerHTML = data.map(([code, d]) => `
-            <div class="history-item"><span>${d.name}</span><b>${code}</b></div>
-        `).join('');
-    }
-
-    window.filterData = () => {
-        const term = document.getElementById('search-bar').value.toLowerCase();
-        const filtered = historyData.filter(([code, d]) => d.name.toLowerCase().includes(term) || code.toLowerCase().includes(term));
-        renderHistory(filtered);
-    };
-
-    // --- Parent Logic ---
     window.getReport = () => {
-        const code = document.getElementById('search-code').value.trim();
-        get(child(ref(db), 'students/' + code)).then(s => {
-            if(s.exists()) {
+        const c = document.getElementById('search-code').value.trim();
+        get(child(ref(db), `students/${c}`)).then((s) => {
+            if(s.exists()){
                 const d = s.val();
-                document.getElementById('v-name').innerText = d.name;
-                document.getElementById('v-grade').innerText = d.grade;
-                document.getElementById('v-note').innerText = d.note;
-                document.getElementById('v-date').innerText = d.date;
-                document.getElementById('report-view').classList.remove('hidden');
+                document.getElementById('view-name').innerText = d.name;
+                document.getElementById('view-grade').innerText = d.grade;
+                document.getElementById('view-note').innerText = d.note;
+                document.getElementById('view-date').innerText = d.date;
+                document.getElementById('report-display').classList.remove('hidden');
             } else { showAlert("الكود غير صحيح"); }
         });
     };
 
-    window.downloadImg = () => {
+    window.downloadImage = () => {
         html2canvas(document.getElementById('capture-area')).then(c => {
             const a = document.createElement('a'); a.download = 'report.png'; a.href = c.toDataURL(); a.click();
         });
