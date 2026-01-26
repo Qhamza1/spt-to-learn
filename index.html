@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SPT LEARN | المنصة التعليمية المتكاملة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
@@ -16,6 +16,23 @@
             --success: #10b981;
             --bg-dark: #0f172a;
         }
+
+        /* منع اختيار النصوص والزوم باللمس */
+        * { 
+            box-sizing: border-box; 
+            transition: 0.3s; 
+            touch-action: manipulation; 
+        }
+
+        /* --- شاشة الأوفلاين العصرية --- */
+        #offline-screen {
+            position: fixed; inset: 0; background: var(--bg-dark);
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; z-index: 10001; text-align: center;
+            padding: 20px; transition: 0.5s;
+        }
+        .offline-icon { font-size: 5rem; color: var(--danger); animation: wifi-blink 1.5s infinite; }
+        @keyframes wifi-blink { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.9); } }
 
         /* --- شاشة الموشن (Splash) --- */
         #splash-screen {
@@ -33,18 +50,18 @@
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
             background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px);
             padding: 15px 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
-            color: white; z-index: 10000; display: flex; align-items: center; gap: 10px;
+            color: white; z-index: 10002; display: flex; align-items: center; gap: 10px;
             transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         #custom-alert.show { transform: translateX(-50%) translateY(0); }
 
         /* --- الستايل العام --- */
-        * { box-sizing: border-box; transition: 0.3s; }
         body {
             margin: 0; font-family: 'Cairo', sans-serif;
             background: linear-gradient(-45deg, #0f172a, #1e293b, #312e81, #581c87);
             background-size: 400% 400%; animation: gradientBG 15s ease infinite;
             color: white; min-height: 100vh; display: flex; justify-content: center; align-items: center;
+            overflow: hidden;
         }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
@@ -68,7 +85,6 @@
             color: white; outline: none; font-family: 'Cairo';
         }
 
-        /* سجل التقارير */
         .history-list {
             margin-top: 20px; max-height: 200px; overflow-y: auto;
             background: rgba(0,0,0,0.2); border-radius: 15px; padding: 10px;
@@ -78,7 +94,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem;
         }
 
-        .hidden { display: none; }
+        .hidden { display: none !important; }
         .screen { animation: fadeIn 0.5s ease; text-align: center; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         
@@ -86,6 +102,13 @@
     </style>
 </head>
 <body>
+
+<div id="offline-screen" class="hidden">
+    <div class="offline-icon"><i class="fas fa-wifi-slash"></i></div>
+    <h2 style="margin-top:20px;">لا يوجد اتصال!</h2>
+    <p style="opacity:0.7;">يرجى التحقق من الإنترنت للمتابعة.</p>
+    <button class="btn-action" style="width: auto; padding: 10px 40px; background: var(--danger);" onclick="location.reload()">إعادة محاولة</button>
+</div>
 
 <div id="custom-alert"><i class="fas fa-bell"></i> <span id="alert-text"></span></div>
 
@@ -100,8 +123,8 @@
         <h1>SPT <span style="color:var(--primary)">LEARN</span></h1>
         <p style="opacity: 0.7">المنصة التعليمية الذكية لجيل المستقبل</p>
         <div style="margin-top: 30px; display: grid; gap: 12px;">
-            <button class="btn-action" onclick="openAuth('teacher')">دخول المعلمين</button>
-            <button class="btn-action" style="background: #334155" onclick="openAuth('parent')">بوابة ولي الأمر والطالب</button>
+            <button class="btn-action" onclick="checkOnline(() => openAuth('teacher'))">دخول المعلمين</button>
+            <button class="btn-action" style="background: #334155" onclick="checkOnline(() => openAuth('parent'))">بوابة ولي الأمر والطالب</button>
             <button class="btn-action" style="background: none; border: 1px solid var(--primary)" onclick="shareApp()">
                 <i class="fas fa-share-nodes"></i> مشاركة التطبيق
             </button>
@@ -112,31 +135,33 @@
         <h3 id="login-title">تسجيل الدخول</h3>
         <input type="email" id="login-email" placeholder="البريد الإلكتروني">
         <input type="password" id="login-pass" placeholder="كلمة المرور">
-        <button class="btn-action" onclick="handleLogin()">دخول</button>
+        <button class="btn-action" onclick="checkOnline(() => handleLogin())">دخول</button>
         <p style="font-size: 0.8rem">ليس لديك حساب؟ <span style="color:var(--primary); cursor:pointer" onclick="showScreen('signup-screen')">سجل الآن</span></p>
         <button class="btn-action" style="background:none" onclick="showScreen('main-menu')">رجوع</button>
     </div>
 
     <div id="signup-screen" class="screen hidden">
         <h3>حساب جديد</h3>
-        <input type="text" id="reg-name" placeholder="الاسم الكامل">
+        <input type="text" id="reg-name" placeholder="الاسم الكامل لولي الأمر">
         <input type="email" id="reg-email" placeholder="الإيميل">
         <input type="password" id="reg-pass" placeholder="كلمة المرور">
-        <button class="btn-action" onclick="handleSignUp()">تفعيل الحساب</button>
+        <button class="btn-action" onclick="checkOnline(() => handleSignUp())">تفعيل الحساب</button>
         <button class="btn-action" style="background:none" onclick="showScreen('login-screen')">رجوع</button>
     </div>
 
     <div id="teacher-dash" class="screen hidden">
         <div id="t-user" style="font-size: 0.8rem; opacity: 0.6; margin-bottom: 10px;"></div>
         <h3>إضافة تقرير</h3>
-        <input type="text" id="s-name" placeholder="اسم الطالب">
+        <input type="text" id="s-name" placeholder="اسم الطالب الثلاثي">
+        <input type="text" id="p-name-input" placeholder="اسم ولي الأمر">
+        <input type="tel" id="p-phone-input" placeholder="رقم الهاتف">
         <select id="s-grade">
             <option value="ممتاز جداً ⭐⭐⭐⭐⭐">ممتاز جداً ⭐⭐⭐⭐⭐</option>
             <option value="جيد جداً ⭐⭐⭐⭐">جيد جداً ⭐⭐⭐⭐</option>
             <option value="جيد ⭐⭐⭐">جيد ⭐⭐⭐</option>
         </select>
-        <textarea id="s-note" rows="2" placeholder="ملاحظاتك..."></textarea>
-        <button class="btn-action" onclick="saveReport()"><i class="fas fa-plus"></i> حفظ التقرير</button>
+        <textarea id="s-note" rows="2" placeholder="ملاحظاتك التربوية..."></textarea>
+        <button class="btn-action" onclick="checkOnline(() => saveReport())"><i class="fas fa-plus"></i> حفظ التقرير</button>
         
         <div style="margin-top: 20px; text-align: right;">
             <small><i class="fas fa-history"></i> آخر الطلاب المضافين:</small>
@@ -149,12 +174,13 @@
     <div id="parent-dash" class="screen hidden">
         <h3>استعلام سريع</h3>
         <input type="text" id="search-code" placeholder="أدخل كود الطالب">
-        <button class="btn-action" onclick="getReport()">عرض التقرير</button>
+        <button class="btn-action" onclick="checkOnline(() => getReport())">عرض التقرير</button>
         <div id="report-display" class="hidden">
             <div id="capture-area" style="margin-top:20px">
                 <div class="report-card">
-                    <h2 id="view-name"></h2>
-                    <p>التقييم: <strong id="view-grade" style="color:var(--primary)"></strong></p>
+                    <h2 id="view-name" style="margin:0; color:var(--primary)"></h2>
+                    <p>ولي الأمر: <b id="view-parent"></b></p>
+                    <p>التقييم: <strong id="view-grade"></strong></p>
                     <p id="view-note" style="background:#f1f5f9; padding:10px; border-radius:10px"></p>
                     <small id="view-date" style="opacity: 0.5"></small>
                 </div>
@@ -166,6 +192,31 @@
 </div>
 
 <script type="module">
+    // --- منع الزوم والتحكم في الإنترنت ---
+    window.checkOnline = (callback) => {
+        if (navigator.onLine) callback();
+        else showAlert("لا يوجد اتصال بالإنترنت حالياً ⚠️");
+    };
+
+    function updateOnlineStatus() {
+        const offlineScreen = document.getElementById('offline-screen');
+        if (!navigator.onLine) offlineScreen.classList.remove('hidden');
+        else {
+            if (!offlineScreen.classList.contains('hidden')) {
+                offlineScreen.classList.add('hidden');
+                showAlert("تمت استعادة الاتصال ✅");
+            }
+        }
+    }
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+
+    // منع الزوم المزدوج
+    document.addEventListener('touchstart', (e) => {
+        if (e.touches.length > 1) e.preventDefault();
+    }, { passive: false });
+
+    // --- Firebase Logic ---
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
     import { getDatabase, ref, set, get, child, push } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
@@ -192,6 +243,7 @@
     };
 
     window.addEventListener('load', () => {
+        updateOnlineStatus();
         setTimeout(() => document.getElementById('splash-screen').classList.add('fade-out'), 2500);
     });
 
@@ -207,12 +259,13 @@
         const n = document.getElementById('reg-name').value;
         const e = document.getElementById('reg-email').value;
         const p = document.getElementById('reg-pass').value;
+        if(!n || !e || !p) return showAlert("أكمل البيانات");
         createUserWithEmailAndPassword(auth, e, p).then((u) => {
             updateProfile(u.user, { displayName: n });
             sendEmailVerification(u.user);
             showAlert("تم! فعل حسابك من الإيميل");
             showScreen('login-screen');
-        }).catch(() => showAlert("خطأ في البيانات"));
+        }).catch(() => showAlert("خطأ في البيانات أو الإيميل مستخدم"));
     };
 
     window.handleLogin = () => {
@@ -226,7 +279,7 @@
     onAuthStateChanged(auth, (u) => {
         if(u && u.emailVerified) {
             role === 'teacher' ? (showScreen('teacher-dash'), loadHistory()) : showScreen('parent-dash');
-            if(role === 'teacher') document.getElementById('t-user').innerText = u.displayName;
+            if(role === 'teacher') document.getElementById('t-user').innerText = "المعلم: " + u.displayName;
         } else { showScreen('main-menu'); }
     });
 
@@ -234,14 +287,20 @@
 
     window.saveReport = () => {
         const n = document.getElementById('s-name').value;
+        const pn = document.getElementById('p-name-input').value;
+        const ph = document.getElementById('p-phone-input').value;
         const g = document.getElementById('s-grade').value;
         const m = document.getElementById('s-note').value;
         const c = 'SPT-' + Math.floor(1000 + Math.random() * 9000);
-        if(!n) return showAlert("أدخل الاسم");
-        set(ref(db, 'students/' + c), { name: n, grade: g, note: m, date: new Date().toLocaleDateString('ar-EG') }).then(() => {
-            showAlert("تم الحفظ بنجاح");
+        if(!n || !pn) return showAlert("أدخل اسم الطالب وولي الأمر");
+        set(ref(db, 'students/' + c), { 
+            name: n, parent: pn, phone: ph, grade: g, note: m, 
+            date: new Date().toLocaleDateString('ar-EG') 
+        }).then(() => {
+            showAlert("تم الحفظ بنجاح | الكود: " + c);
             loadHistory();
             document.getElementById('s-name').value = "";
+            document.getElementById('p-name-input').value = "";
         });
     };
 
@@ -263,8 +322,9 @@
             if(s.exists()){
                 const d = s.val();
                 document.getElementById('view-name').innerText = d.name;
+                document.getElementById('view-parent').innerText = d.parent || "غير مسجل";
                 document.getElementById('view-grade').innerText = d.grade;
-                document.getElementById('view-note').innerText = d.note;
+                document.getElementById('view-note').innerText = d.note || "لا توجد ملاحظات";
                 document.getElementById('view-date').innerText = d.date;
                 document.getElementById('report-display').classList.remove('hidden');
             } else { showAlert("الكود غير صحيح"); }
@@ -273,7 +333,7 @@
 
     window.downloadImage = () => {
         html2canvas(document.getElementById('capture-area')).then(c => {
-            const a = document.createElement('a'); a.download = 'report.png'; a.href = c.toDataURL(); a.click();
+            const a = document.createElement('a'); a.download = 'Student-Report.png'; a.href = c.toDataURL(); a.click();
         });
     };
 
