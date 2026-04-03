@@ -3,391 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="referrer" content="no-referrer">
-    <title>SPT LEARN | المنصة التعليمية المتكاملة</title>
+    <title>SPT LEARN | Global Edition</title>
     
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#6366f1">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
         :root {
-            --primary: #6366f1;
-            --secondary: #8b5cf6;
-            --danger: #ef4444;
-            --success: #10b981;
-            --bg-dark: #0f172a;
+            --primary: #6366f1; --secondary: #8b5cf6; --success: #10b981; --danger: #ef4444;
+            --bg-dark: #0f172a; --card-bg: rgba(255,255,255,0.05); --text-color: #ffffff;
         }
 
-        /* حماية الواجهة ومنع التفاعل غير المصرح */
-        * { 
-            box-sizing: border-box; 
-            transition: 0.3s; 
-            touch-action: manipulation; 
-            -webkit-user-select: none; /* منع تحديد النصوص للحماية */
+        .light-mode {
+            --bg-dark: #f1f5f9; --card-bg: #ffffff; --text-color: #1e293b;
         }
 
-        input, textarea { user-select: text !important; } /* السماح بالكتابة فقط في الحقول */
-
-        #offline-screen {
-            position: fixed; inset: 0; background: var(--bg-dark);
-            display: flex; flex-direction: column; justify-content: center;
-            align-items: center; z-index: 10001; text-align: center;
-            padding: 20px; transition: 0.5s;
-        }
-        .offline-icon { font-size: 5rem; color: var(--danger); animation: wifi-blink 1.5s infinite; }
-        @keyframes wifi-blink { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.9); } }
-
-        #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-dark); display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 9999;
-            transition: 0.8s;
-        }
-        .splash-logo { font-size: 5rem; color: var(--primary); animation: pulse 2s infinite; }
-        .fade-out { opacity: 0; visibility: hidden; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px var(--primary)); } 50% { transform: scale(1.1); filter: drop-shadow(0 0 30px var(--secondary)); } }
-
-        #custom-alert {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
-            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px);
-            padding: 15px 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
-            color: white; z-index: 10002; display: flex; align-items: center; gap: 10px;
-            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        #custom-alert.show { transform: translateX(-50%) translateY(0); }
-
-        body {
-            margin: 0; font-family: 'Cairo', sans-serif;
-            background: linear-gradient(-45deg, #0f172a, #1e293b, #312e81, #581c87);
-            background-size: 400% 400%; animation: gradientBG 15s ease infinite;
-            color: white; min-height: 100vh; display: flex; justify-content: center; align-items: center;
-            overflow: hidden;
-        }
-        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-
-        .container {
-            width: 92%; max-width: 480px; background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px); border-radius: 35px; padding: 30px;
-            border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 40px 100px rgba(0,0,0,0.5);
-        }
-
-        .btn-action {
-            width: 100%; padding: 15px; border-radius: 18px; border: none;
-            color: white; font-weight: 700; cursor: pointer; display: flex;
-            align-items: center; justify-content: center; gap: 10px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary)); margin-top: 10px;
-        }
-
-        input, select, textarea {
-            width: 100%; padding: 14px; margin: 8px 0; border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3);
-            color: white; outline: none; font-family: 'Cairo';
-        }
-
-        .history-list {
-            margin-top: 20px; max-height: 200px; overflow-y: auto;
-            background: rgba(0,0,0,0.2); border-radius: 15px; padding: 10px;
-        }
-        .history-item {
-            display: flex; justify-content: space-between; padding: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem;
-        }
-
-        .hidden { display: none !important; }
-        .screen { animation: fadeIn 0.5s ease; text-align: center; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        * { box-sizing: border-box; transition: 0.3s; font-family: 'Cairo', sans-serif; }
+        body { margin: 0; background: var(--bg-dark); color: var(--text-color); min-height: 100vh; overflow-x: hidden; }
+        .container { width: 100%; max-width: 480px; margin: 0 auto; padding: 20px; padding-bottom: 100px; }
         
-        .report-card { background: white; color: #1e293b; padding: 25px; border-radius: 20px; text-align: right; }
+        .card { background: var(--card-bg); backdrop-filter: blur(15px); border-radius: 25px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; }
+        .btn-action { width: 100%; padding: 14px; border-radius: 15px; border: none; color: white; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, var(--primary), var(--secondary)); margin-top: 10px; }
+        
+        .settings-item { display: flex; align-items: center; justify-content: space-between; padding: 15px; border-radius: 15px; background: rgba(255,255,255,0.03); margin-bottom: 10px; cursor: pointer; }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 480px; background: var(--card-bg); display: flex; justify-content: space-around; padding: 15px; border-top-left-radius: 25px; border-top-right-radius: 25px; left: 50%; transform: translateX(-50%); z-index: 1000; border-top: 1px solid rgba(255,255,255,0.1); }
+        .nav-item { color: gray; font-size: 0.8rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .nav-item.active { color: var(--primary); }
+        
+        .hidden { display: none !important; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.1); color: inherit; }
     </style>
 </head>
-<body>
-
-<div id="offline-screen" class="hidden">
-    <div class="offline-icon"><i class="fas fa-wifi-slash"></i></div>
-    <h2 style="margin-top:20px;">أنت تعمل بدون اتصال</h2>
-    <p style="opacity:0.7;">يتم عرض نسخة البيانات المحفوظة على هاتفك.</p>
-    <button class="btn-action" style="width: auto; padding: 10px 40px; background: var(--primary);" onclick="location.reload()">تحديث الشبكة</button>
-</div>
-
-<div id="custom-alert"><i class="fas fa-bell"></i> <span id="alert-text"></span></div>
-
-<div id="splash-screen">
-    <div class="splash-logo"><i class="fas fa-graduation-cap"></i></div>
-    <h2 style="letter-spacing: 2px;">SPT <span style="color:var(--primary)">LEARN</span></h2>
-</div>
+<body class="dark-mode">
 
 <div class="container">
-    <div id="main-menu" class="screen">
-        <div style="font-size: 3.5rem; color: var(--primary);"><i class="fas fa-graduation-cap"></i></div>
-        <h1>SPT <span style="color:var(--primary)">LEARN</span></h1>
-        <p style="opacity: 0.7">المنصة التعليمية الذكية لجيل المستقبل</p>
-        <div style="margin-top: 30px; display: grid; gap: 12px;">
-            <button class="btn-action" onclick="checkOnline(() => openAuth('teacher'))">دخول المعلمين</button>
-            <button class="btn-action" style="background: #334155" onclick="checkOnline(() => openAuth('parent'))">بوابة ولي الأمر والطالب</button>
-            <button class="btn-action" style="background: none; border: 1px solid var(--primary)" onclick="shareApp()">
-                <i class="fas fa-share-nodes"></i> مشاركة التطبيق
-            </button>
+    
+    <div id="auth-screen" class="screen">
+        <div class="card" style="text-align: center;">
+            <i class="fas fa-graduation-cap" style="font-size: 4rem; color: var(--primary);"></i>
+            <h1>SPT LEARN</h1>
+            <p id="txt-auth-desc">اختر بوابة الدخول</p>
+            <button class="btn-action" onclick="openLogin('teacher')"><i class="fas fa-chalkboard-teacher"></i> <span id="btn-t">دخول المعلمين</span></button>
+            <button class="btn-action" style="background:#4f46e5" onclick="openLogin('student')"><i class="fas fa-user-graduate"></i> <span id="btn-s">بوابة الطالب</span></button>
+            <button class="btn-action" style="background:#4338ca" onclick="openLogin('parent')"><i class="fas fa-user-friends"></i> <span id="btn-p">ولي الأمر</span></button>
         </div>
     </div>
 
-    <div id="login-screen" class="screen hidden">
-        <h3 id="login-title">تسجيل الدخول</h3>
-        <input type="email" id="login-email" placeholder="البريد الإلكتروني">
-        <input type="password" id="login-pass" placeholder="كلمة المرور">
-        <button class="btn-action" onclick="checkOnline(() => handleLogin())">دخول</button>
-        <p style="font-size: 0.8rem">ليس لديك حساب؟ <span style="color:var(--primary); cursor:pointer" onclick="showScreen('signup-screen')">سجل الآن</span></p>
-        <button class="btn-action" style="background:none" onclick="showScreen('main-menu')">رجوع</button>
-    </div>
-
-    <div id="signup-screen" class="screen hidden">
-        <h3>حساب جديد</h3>
-        <input type="text" id="reg-name" placeholder="الاسم الكامل لولي الأمر">
-        <input type="email" id="reg-email" placeholder="الإيميل">
-        <input type="password" id="reg-pass" placeholder="كلمة المرور">
-        <button class="btn-action" onclick="checkOnline(() => handleSignUp())">تفعيل الحساب</button>
-        <button class="btn-action" style="background:none" onclick="showScreen('login-screen')">رجوع</button>
-    </div>
-
-    <div id="teacher-dash" class="screen hidden">
-        <div id="t-user" style="font-size: 0.8rem; opacity: 0.6; margin-bottom: 10px;"></div>
-        <h3>إضافة تقرير</h3>
-        <input type="text" id="s-name" placeholder="اسم الطالب الثلاثي">
-        <input type="text" id="p-name-input" placeholder="اسم ولي الأمر">
-        <input type="tel" id="p-phone-input" placeholder="رقم الهاتف">
-        <select id="s-grade">
-            <option value="ممتاز جداً ⭐⭐⭐⭐⭐">ممتاز جداً ⭐⭐⭐⭐⭐</option>
-            <option value="جيد جداً ⭐⭐⭐⭐">جيد جداً ⭐⭐⭐⭐</option>
-            <option value="جيد ⭐⭐⭐">جيد ⭐⭐⭐</option>
-        </select>
-        <textarea id="s-note" rows="2" placeholder="ملاحظاتك التربوية..."></textarea>
-        <button class="btn-action" onclick="checkOnline(() => saveReport())"><i class="fas fa-plus"></i> حفظ التقرير</button>
-        
-        <div style="margin-top: 20px; text-align: right;">
-            <small><i class="fas fa-history"></i> آخر الطلاب المضافين:</small>
-            <div id="history-list" class="history-list"></div>
+    <div id="wallet-screen" class="screen hidden">
+        <div class="card" style="text-align: center; border: 1px solid var(--success);">
+            <h3 id="txt-w-title">المحفظة الرقمية</h3>
+            <div style="font-size: 2.5rem; color: var(--success); font-weight: 900;">0.00 EGP</div>
+            <div style="display:flex; gap:10px;">
+                <button class="btn-action" style="background:var(--success)">Vodafone Cash</button>
+                <button class="btn-action" style="background:var(--secondary)">InstaPay</button>
+            </div>
         </div>
-        
-        <button class="btn-action" style="background:var(--danger); margin-top:20px" onclick="handleLogout()">خروج</button>
+        <div class="card">
+            <h4 id="txt-w-log"><i class="fas fa-history"></i> سجل العمليات</h4>
+            <div id="wallet-status" style="font-size: 0.8rem; opacity: 0.6;">لا توجد عمليات سابقة.</div>
+        </div>
     </div>
 
-    <div id="parent-dash" class="screen hidden">
-        <h3>استعلام سريع</h3>
-        <input type="text" id="search-code" placeholder="أدخل كود الطالب">
-        <button class="btn-action" onclick="getReport()">عرض التقرير</button>
-        <div id="report-display" class="hidden">
-            <div id="capture-area" style="margin-top:20px">
-                <div class="report-card">
-                    <h2 id="view-name" style="margin:0; color:var(--primary)"></h2>
-                    <p>ولي الأمر: <b id="view-parent"></b></p>
-                    <p>التقييم: <strong id="view-grade"></strong></p>
-                    <p id="view-note" style="background:#f1f5f9; padding:10px; border-radius:10px"></p>
-                    <small id="view-date" style="opacity: 0.5"></small>
+    <div id="settings-screen" class="screen hidden">
+        <div class="card">
+            <h3 id="txt-set-head">الإعدادات</h3>
+            
+            <div class="settings-item">
+                <span><i class="fas fa-user-circle"></i> <span id="opt-profile">البروفايل الشخصي</span></span>
+            </div>
+
+            <div class="settings-item" onclick="document.getElementById('lang-list').classList.toggle('hidden')">
+                <span><i class="fas fa-language"></i> <span id="opt-lang">اللغة</span></span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div id="lang-list" class="hidden" style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom:10px;">
+                <button class="btn-action" style="font-size:0.7rem;" onclick="setLang('ar')">العربية</button>
+                <button class="btn-action" style="font-size:0.7rem;" onclick="setLang('en')">English</button>
+                <button class="btn-action" style="font-size:0.7rem;" onclick="setLang('fr')">Français</button>
+                <button class="btn-action" style="font-size:0.7rem;" onclick="setLang('it')">Italiano</button>
+                <button class="btn-action" style="font-size:0.7rem;" onclick="setLang('de')">Deutsch</button>
+            </div>
+
+            <div class="settings-item" onclick="toggleTheme()">
+                <span><i class="fas fa-adjust"></i> <span id="opt-theme">السمات</span></span>
+            </div>
+
+            <div class="settings-item" onclick="window.open('https://wa.me/201227398087')">
+                <span><i class="fab fa-whatsapp"></i> <span id="opt-support">الدعم الفني</span></span>
+            </div>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <p id="txt-follow">تابعنا على</p>
+                <div style="display: flex; gap: 20px; justify-content: center;">
+                    <a href="https://facebook.com/share/1ENTxFp6Dh/?mibextid=wwXIfr" style="color:#1877f2; font-size: 1.5rem;"><i class="fab fa-facebook"></i></a>
+                    <a href="https://instagram.com/spttolearn?igsh=OTV0ZXhkdWh1ZWJh&utm_source=qr" style="color:#e4405f; font-size: 1.5rem;"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
-            <button class="btn-action" style="background:#475569" onclick="downloadImage()"><i class="fas fa-download"></i> تحميل كصورة</button>
         </div>
-        <button class="btn-action" style="background:none; margin-top:20px" onclick="handleLogout()">خروج</button>
     </div>
+
+    <div id="ai-screen" class="screen hidden">
+        <div class="card">
+            <h3 id="txt-ai-title"><i class="fas fa-robot"></i> مساعد SPT الذكي</h3>
+            <div id="chat-box" style="height:250px; overflow-y:auto; background:rgba(0,0,0,0.2); padding:10px; border-radius:15px; margin-bottom:10px;"></div>
+            <input type="text" id="ai-input" placeholder="..." style="width:calc(100% - 60px); display:inline-block;">
+            <button onclick="askAI()" style="width:50px; height:45px; border-radius:12px; background:var(--primary); border:none; color:white;"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
 </div>
 
-<script type="module">
-    // --- تعطيل رسائل تأكيد الخروج والتحكم في زر الرجوع ---
-    window.onbeforeunload = null;
-    window.addEventListener('beforeunload', function (e) {
-        delete e['returnValue'];
-    });
+<div class="bottom-nav">
+    <div class="nav-item active" onclick="navTo('auth-screen', this)"><i class="fas fa-home"></i><span id="nav-h">الرئيسية</span></div>
+    <div class="nav-item" onclick="navTo('wallet-screen', this)"><i class="fas fa-wallet"></i><span id="nav-w">المحفظة</span></div>
+    <div class="nav-item" onclick="navTo('ai-screen', this)"><i class="fas fa-robot"></i><span id="nav-a">البوت</span></div>
+    <div class="nav-item" onclick="navTo('settings-screen', this)"><i class="fas fa-cog"></i><span id="nav-s">الإعدادات</span></div>
+</div>
 
-    history.pushState(null, null, location.href);
-    window.onpopstate = function () {
-        history.pushState(null, null, location.href);
-    };
-
-    // --- متغيرات الحماية ضد التخمين ---
-    let loginAttempts = 0;
-    let isLocked = false;
-
-    // --- تسجيل الـ Service Worker لـ PWA ---
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js').then(() => console.log("PWA Active ✅"));
-        });
-    }
-
-    // --- حماية الواجهة ---
-    document.addEventListener('contextmenu', e => e.preventDefault());
-    document.onkeydown = e => {
-        if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) return false;
-    };
-
-    window.checkOnline = (callback) => {
-        if (navigator.onLine) callback();
-        else {
-            document.getElementById('offline-screen').classList.remove('hidden');
-            showAlert("أنت تعمل في وضع الأوفلاين ⚠️");
+<script>
+    // القاموس الشامل للترجمة
+    const translations = {
+        ar: {
+            authDesc: "اختر بوابة الدخول", btnT: "دخول المعلمين", btnS: "بوابة الطالب", btnP: "ولي الأمر",
+            wTitle: "المحفظة الرقمية", wLog: "سجل العمليات", wStatus: "لا توجد عمليات سابقة.",
+            setHead: "الإعدادات", optProf: "البروفايل الشخصي", optLang: "اللغة", optTheme: "السمات (فاتح/داكن)", optSupp: "الدعم الفني",
+            follow: "تابعنا على", aiTitle: "مساعد SPT الذكي", navH: "الرئيسية", navW: "المحفظة", navA: "البوت", navS: "الإعدادات"
+        },
+        en: {
+            authDesc: "Choose Portal", btnT: "Teacher Login", btnS: "Student Portal", btnP: "Parent Portal",
+            wTitle: "Digital Wallet", wLog: "Transaction History", wStatus: "No previous transactions.",
+            setHead: "Settings", optProf: "Personal Profile", optLang: "Language", optTheme: "Themes (Light/Dark)", optSupp: "Technical Support",
+            follow: "Follow Us", aiTitle: "SPT AI Assistant", navH: "Home", navW: "Wallet", navA: "AI Bot", navS: "Settings"
+        },
+        fr: {
+            authDesc: "Choisir le portail", btnT: "Connexion Prof", btnS: "Portail Étudiant", btnP: "Portail Parent",
+            wTitle: "Portefeuille", wLog: "Historique", wStatus: "Aucune transaction.",
+            setHead: "Paramètres", optProf: "Profil", optLang: "Langue", optTheme: "Thèmes", optSupp: "Support",
+            follow: "Suivez-nous", aiTitle: "Assistant SPT", navH: "Accueil", navW: "Portefeuille", navA: "IA Bot", navS: "Paramètres"
+        },
+        it: {
+            authDesc: "Scegli il portale", btnT: "Login Insegnante", btnS: "Portale Studenti", btnP: "Portale Genitori",
+            wTitle: "Portafoglio", wLog: "Cronologia", wStatus: "Nessuna transazione.",
+            setHead: "Impostazioni", optProf: "Profilo", optLang: "Lingua", optTheme: "Temi", optSupp: "Supporto",
+            follow: "Seguici", aiTitle: "Assistente SPT", navH: "Home", navW: "Portafoglio", navA: "AI Bot", navS: "Impostazioni"
+        },
+        de: {
+            authDesc: "Portal wählen", btnT: "Lehrer Login", btnS: "Studentenportal", btnP: "Elternportal",
+            wTitle: "Brieftasche", wLog: "Verlauf", wStatus: "Keine Transaktionen.",
+            setHead: "Einstellungen", optProf: "Profil", optLang: "Sprache", optTheme: "Themen", optSupp: "Support",
+            follow: "Folge uns", aiTitle: "SPT Assistent", navH: "Start", navW: "Brieftasche", navA: "KI-Bot", navS: "Einstellungen"
         }
     };
 
-    function updateOnlineStatus() {
-        const offlineScreen = document.getElementById('offline-screen');
-        if (!navigator.onLine) offlineScreen.classList.remove('hidden');
-        else offlineScreen.classList.add('hidden');
-    }
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
+    window.setLang = (lang) => {
+        const t = translations[lang];
+        // تحديث كل النصوص في الصفحة
+        document.getElementById('txt-auth-desc').innerText = t.authDesc;
+        document.getElementById('btn-t').innerText = t.btnT;
+        document.getElementById('btn-s').innerText = t.btnS;
+        document.getElementById('btn-p').innerText = t.btnP;
+        document.getElementById('txt-w-title').innerText = t.wTitle;
+        document.getElementById('txt-w-log').innerHTML = `<i class="fas fa-history"></i> ${t.wLog}`;
+        document.getElementById('wallet-status').innerText = t.wStatus;
+        document.getElementById('txt-set-head').innerText = t.setHead;
+        document.getElementById('opt-profile').innerText = t.optProf;
+        document.getElementById('opt-lang').innerText = t.optLang;
+        document.getElementById('opt-theme').innerText = t.optTheme;
+        document.getElementById('opt-support').innerText = t.optSupp;
+        document.getElementById('txt-follow').innerText = t.follow;
+        document.getElementById('txt-ai-title').innerHTML = `<i class="fas fa-robot"></i> ${t.aiTitle}`;
+        document.getElementById('nav-h').innerText = t.navH;
+        document.getElementById('nav-w').innerText = t.navW;
+        document.getElementById('nav-a').innerText = t.navA;
+        document.getElementById('nav-s').innerText = t.navS;
 
-    document.addEventListener('touchstart', (e) => {
-        if (e.touches.length > 1) e.preventDefault();
-    }, { passive: false });
-
-    // --- Firebase Logic ---
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getDatabase, ref, set, get, child, push } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBmjOSQ9VlpKqs-V2IXEY_tWLjCSluQuGE",
-      authDomain: "spt-to-learn.firebaseapp.com",
-      databaseURL: "https://spt-to-learn-default-rtdb.firebaseio.com",
-      projectId: "spt-to-learn",
-      storageBucket: "spt-to-learn.firebasestorage.app",
-      messagingSenderId: "122536294060",
-      appId: "1:122536294060:web:74353a633191a48d231109"
+        document.body.dir = (lang === 'ar' ? 'rtl' : 'ltr');
+        localStorage.setItem('spt_lang', lang);
+        document.getElementById('lang-list').classList.add('hidden');
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const auth = getAuth(app);
-
-    window.showAlert = (text) => {
-        const b = document.getElementById('custom-alert');
-        document.getElementById('alert-text').innerText = text;
-        b.classList.add('show');
-        setTimeout(() => b.classList.remove('show'), 3000);
+    window.toggleTheme = () => {
+        document.body.classList.toggle('light-mode');
+        localStorage.setItem('spt_theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
     };
 
-    window.addEventListener('load', () => {
-        updateOnlineStatus();
-        setTimeout(() => document.getElementById('splash-screen').classList.add('fade-out'), 2500);
-    });
-
-    let role = "";
-    window.showScreen = (id) => {
+    window.navTo = (id, el) => {
         document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        el.classList.add('active');
     };
 
-    window.openAuth = (r) => { role = r; showScreen('login-screen'); };
-
-    // تنظيف النصوص من الرموز الخطرة
-    const sanitize = (str) => str.replace(/[<>]/g, "");
-
-    window.handleSignUp = () => {
-        const n = sanitize(document.getElementById('reg-name').value);
-        const e = document.getElementById('reg-email').value;
-        const p = document.getElementById('reg-pass').value;
-        if(!n || !e || !p) return showAlert("أكمل البيانات");
-        createUserWithEmailAndPassword(auth, e, p).then((u) => {
-            updateProfile(u.user, { displayName: n });
-            sendEmailVerification(u.user);
-            showAlert("تم! فعل حسابك من الإيميل");
-            showScreen('login-screen');
-        }).catch(() => showAlert("خطأ في البيانات"));
-    };
-
-    window.handleLogin = () => {
-        const e = document.getElementById('login-email').value;
-        const p = document.getElementById('login-pass').value;
-        signInWithEmailAndPassword(auth, e, p).then((u) => {
-            if(!u.user.emailVerified) { showAlert("فعل إيميلك أولاً"); signOut(auth); }
-        }).catch(() => showAlert("بيانات خاطئة"));
-    };
-
-    onAuthStateChanged(auth, (u) => {
-        if(u && u.emailVerified) {
-            role === 'teacher' ? (showScreen('teacher-dash'), loadHistory()) : showScreen('parent-dash');
-            if(role === 'teacher') document.getElementById('t-user').innerText = "المعلم: " + u.displayName;
-        } else { showScreen('main-menu'); }
-    });
-
-    window.handleLogout = () => signOut(auth);
-
-    window.saveReport = () => {
-        const n = sanitize(document.getElementById('s-name').value);
-        const pn = sanitize(document.getElementById('p-name-input').value);
-        const ph = document.getElementById('p-phone-input').value;
-        const g = document.getElementById('s-grade').value;
-        const m = sanitize(document.getElementById('s-note').value);
-        const c = 'SPT-' + Math.floor(1000 + Math.random() * 9000);
-        if(!n || !pn) return showAlert("أدخل الاسم");
-        set(ref(db, 'students/' + c), { 
-            name: n, parent: pn, phone: ph, grade: g, note: m, 
-            date: new Date().toLocaleDateString('ar-EG') 
-        }).then(() => {
-            showAlert("تم الحفظ بنجاح | الكود: " + c);
-            loadHistory();
-            document.getElementById('s-name').value = "";
-            document.getElementById('p-name-input').value = "";
-        });
-    };
-
-    window.loadHistory = () => {
-        get(child(ref(db), 'students')).then((s) => {
-            const list = document.getElementById('history-list');
-            list.innerHTML = "";
-            if(s.exists()){
-                Object.entries(s.val()).reverse().slice(0, 5).forEach(([code, data]) => {
-                    const item = document.createElement('div');
-                    item.className = 'history-item';
-                    item.innerHTML = `<span>${data.name}</span> <b style="color:var(--primary)">${code}</b>`;
-                    list.appendChild(item);
-                });
-            }
-        });
-    };
-
-    window.getReport = () => {
-        if(isLocked) return showAlert("محاولات كثيرة.. انتظر دقيقة ⏳");
-        const c = document.getElementById('search-code').value.trim();
-        if(c.length < 4) return showAlert("الكود قصير جداً");
-
-        checkOnline(() => {
-            get(child(ref(db), `students/${c}`)).then((s) => {
-                if(s.exists()){
-                    const d = s.val();
-                    document.getElementById('view-name').innerText = d.name;
-                    document.getElementById('view-parent').innerText = d.parent || "غير مسجل";
-                    document.getElementById('view-grade').innerText = d.grade;
-                    document.getElementById('view-note').innerText = d.note || "لا توجد ملاحظات";
-                    document.getElementById('view-date').innerText = d.date;
-                    document.getElementById('report-display').classList.remove('hidden');
-                    loginAttempts = 0;
-                } else {
-                    loginAttempts++;
-                    if(loginAttempts >= 3) {
-                        isLocked = true;
-                        setTimeout(() => { isLocked = false; loginAttempts = 0; }, 60000);
-                        showAlert("تم قفل البحث مؤقتاً للحماية 🛡️");
-                    } else {
-                        showAlert(`الكود خطأ! تبقى لك ${3-loginAttempts} محاولات`);
-                    }
-                }
-            });
-        });
-    };
-
-    window.downloadImage = () => {
-        html2canvas(document.getElementById('capture-area')).then(c => {
-            const a = document.createElement('a'); a.download = 'Student-Report.png'; a.href = c.toDataURL(); a.click();
-        });
-    };
-
-    window.shareApp = () => {
-        if(navigator.share) navigator.share({ title: 'SPT LEARN', url: window.location.href });
-        else showAlert("انسخ الرابط وشاركه يدوياً");
+    window.onload = () => {
+        setLang(localStorage.getItem('spt_lang') || 'ar');
+        if(localStorage.getItem('spt_theme') === 'light') document.body.classList.add('light-mode');
     };
 </script>
 </body>
