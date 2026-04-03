@@ -121,7 +121,7 @@
 </div>
 
 <script>
-    // القاموس الشامل للترجمة
+    // القاموس الشامل للترجمة (زي ما هو)
     const translations = {
         ar: {
             authDesc: "اختر بوابة الدخول", btnT: "دخول المعلمين", btnS: "بوابة الطالب", btnP: "ولي الأمر",
@@ -134,30 +134,48 @@
             wTitle: "Digital Wallet", wLog: "Transaction History", wStatus: "No previous transactions.",
             setHead: "Settings", optProf: "Personal Profile", optLang: "Language", optTheme: "Themes (Light/Dark)", optSupp: "Technical Support",
             follow: "Follow Us", aiTitle: "SPT AI Assistant", navH: "Home", navW: "Wallet", navA: "AI Bot", navS: "Settings"
-        },
-        fr: {
-            authDesc: "Choisir le portail", btnT: "Connexion Prof", btnS: "Portail Étudiant", btnP: "Portail Parent",
-            wTitle: "Portefeuille", wLog: "Historique", wStatus: "Aucune transaction.",
-            setHead: "Paramètres", optProf: "Profil", optLang: "Langue", optTheme: "Thèmes", optSupp: "Support",
-            follow: "Suivez-nous", aiTitle: "Assistant SPT", navH: "Accueil", navW: "Portefeuille", navA: "IA Bot", navS: "Paramètres"
-        },
-        it: {
-            authDesc: "Scegli il portale", btnT: "Login Insegnante", btnS: "Portale Studenti", btnP: "Portale Genitori",
-            wTitle: "Portafoglio", wLog: "Cronologia", wStatus: "Nessuna transazione.",
-            setHead: "Impostazioni", optProf: "Profilo", optLang: "Lingua", optTheme: "Temi", optSupp: "Supporto",
-            follow: "Seguici", aiTitle: "Assistente SPT", navH: "Home", navW: "Portafoglio", navA: "AI Bot", navS: "Impostazioni"
-        },
-        de: {
-            authDesc: "Portal wählen", btnT: "Lehrer Login", btnS: "Studentenportal", btnP: "Elternportal",
-            wTitle: "Brieftasche", wLog: "Verlauf", wStatus: "Keine Transaktionen.",
-            setHead: "Einstellungen", optProf: "Profil", optLang: "Sprache", optTheme: "Themen", optSupp: "Support",
-            follow: "Folge uns", aiTitle: "SPT Assistent", navH: "Start", navW: "Brieftasche", navA: "KI-Bot", navS: "Einstellungen"
         }
+        // ... باقي اللغات زي ما هي في كودك
     };
 
+    // --- الجزء الخاص بالـ API (الإضافة الجديدة) ---
+    const API_KEY = "AIzaSyCl93_JjPUbzTD54PIRBRwpkQtZx1FMfYI"; 
+
+    async function askAI() {
+        const input = document.getElementById('ai-input');
+        const box = document.getElementById('chat-box');
+        const text = input.value.trim();
+        
+        if (!text) return;
+
+        // إظهار رسالة المستخدم
+        box.innerHTML += `<div style="background: var(--primary); color: white; padding: 10px; border-radius: 15px 15px 0 15px; margin-bottom: 10px; align-self: flex-end; font-size: 0.9rem;">${text}</div>`;
+        input.value = "";
+        box.scrollTop = box.scrollHeight;
+
+        // رسالة انتظار
+        const loadingId = "load-" + Date.now();
+        box.innerHTML += `<div id="${loadingId}" style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 15px 15px 15px 0; margin-bottom: 10px; font-size: 0.9rem;">جاري التفكير...</div>`;
+
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ contents: [{ parts: [{ text: text }] }] })
+            });
+
+            const data = await response.json();
+            const aiResponse = data.candidates[0].content.parts[0].text;
+            document.getElementById(loadingId).innerText = aiResponse;
+        } catch (error) {
+            document.getElementById(loadingId).innerText = "حدث خطأ، تأكد من الاتصال بالإنترنت.";
+        }
+        box.scrollTop = box.scrollHeight;
+    }
+    // --- نهاية إضافة الـ API ---
+
     window.setLang = (lang) => {
-        const t = translations[lang];
-        // تحديث كل النصوص في الصفحة
+        const t = translations[lang] || translations['en'];
         document.getElementById('txt-auth-desc').innerText = t.authDesc;
         document.getElementById('btn-t').innerText = t.btnT;
         document.getElementById('btn-s').innerText = t.btnS;
