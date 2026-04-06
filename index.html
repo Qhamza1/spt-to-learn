@@ -2,223 +2,130 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SPT LEARN | Global Edition</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPT LEARN | الرئيسية</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --primary: #6366f1; --secondary: #8b5cf6; --success: #10b981; --danger: #ef4444;
-            --bg-dark: #0f172a; --card-bg: rgba(255,255,255,0.05); --text-color: #ffffff;
-        }
-
-        .light-mode {
-            --bg-dark: #f1f5f9; --card-bg: #ffffff; --text-color: #1e293b;
-        }
-
-        * { box-sizing: border-box; transition: 0.3s; font-family: 'Cairo', sans-serif; }
-        body { margin: 0; background: var(--bg-dark); color: var(--text-color); min-height: 100vh; overflow-x: hidden; }
-        .container { width: 100%; max-width: 480px; margin: 0 auto; padding: 20px; padding-bottom: 100px; }
-        
-        .card { background: var(--card-bg); backdrop-filter: blur(15px); border-radius: 25px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; }
-        .btn-action { width: 100%; padding: 14px; border-radius: 15px; border: none; color: white; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, var(--primary), var(--secondary)); margin-top: 10px; }
-        
-        .settings-item { display: flex; align-items: center; justify-content: space-between; padding: 15px; border-radius: 15px; background: rgba(255,255,255,0.03); margin-bottom: 10px; cursor: pointer; }
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 480px; background: var(--card-bg); display: flex; justify-content: space-around; padding: 15px; border-top-left-radius: 25px; border-top-right-radius: 25px; left: 50%; transform: translateX(-50%); z-index: 1000; border-top: 1px solid rgba(255,255,255,0.1); }
-        .nav-item { color: gray; font-size: 0.8rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .nav-item.active { color: var(--primary); }
-        
-        .hidden { display: none !important; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.1); color: inherit; }
-    </style>
 </head>
-<body class="dark-mode">
+<body>
 
-<div class="container">
-    
-    <div id="auth-screen" class="screen">
-        <div class="card" style="text-align: center;">
-            <i class="fas fa-graduation-cap" style="font-size: 4rem; color: var(--primary);"></i>
-            <h1>SPT LEARN</h1>
-            <p id="txt-auth-desc">اختر بوابة الدخول</p>
-            <button class="btn-action" onclick="openLogin('teacher')"><i class="fas fa-chalkboard-teacher"></i> <span id="btn-t">دخول المعلمين</span></button>
-            <button class="btn-action" style="background:#4f46e5" onclick="openLogin('student')"><i class="fas fa-user-graduate"></i> <span id="btn-s">بوابة الطالب</span></button>
-            <button class="btn-action" style="background:#4338ca" onclick="openLogin('parent')"><i class="fas fa-user-friends"></i> <span id="btn-p">ولي الأمر</span></button>
-        </div>
+    <div id="splash-screen">
+        <h1 style="color:var(--primary); font-family: 'Cairo';">SPT LEARN</h1>
+        <div class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--secondary);"></div>
     </div>
 
-    <div id="wallet-screen" class="screen hidden">
-        <div class="card" style="text-align: center; border: 1px solid var(--success);">
-            <h3 id="txt-w-title">المحفظة الرقمية</h3>
-            <div style="font-size: 2.5rem; color: var(--success); font-weight: 900;">0.00 EGP</div>
-            <div style="display:flex; gap:10px;">
-                <button class="btn-action" style="background:var(--success)">Vodafone Cash</button>
-                <button class="btn-action" style="background:var(--secondary)">InstaPay</button>
+    <div class="container">
+        <div id="auth-screen" class="screen">
+            <div class="card" style="text-align: center;">
+                <img src="logo.png" class="auth-logo" alt="SPT Logo" onerror="this.src='https://via.placeholder.com/100?text=SPT'">
+                
+                <h2>مرحباً بك في SPT</h2>
+                <p style="opacity: 0.7;">اختر بوابة الدخول للاستمرار</p>
+                
+                <div class="role-selection">
+                    <div id="role-t" class="role-btn" onclick="setRole('teacher')">
+                        <i class="fas fa-chalkboard-teacher"></i><br>بوابة المعلمين
+                    </div>
+                    <div id="role-s" class="role-btn" onclick="setRole('student')">
+                        <i class="fas fa-user-graduate"></i><br>بوابة الطلاب
+                    </div>
+                </div>
+
+                <input type="email" id="login-email" placeholder="البريد الإلكتروني">
+                <input type="password" id="login-pass" placeholder="كلمة السر">
+                <button class="btn-action" onclick="handleLogin()">
+                    <i class="fas fa-sign-in-alt"></i> دخول للتطبيق
+                </button>
             </div>
         </div>
-        <div class="card">
-            <h4 id="txt-w-log"><i class="fas fa-history"></i> سجل العمليات</h4>
-            <div id="wallet-status" style="font-size: 0.8rem; opacity: 0.6;">لا توجد عمليات سابقة.</div>
-        </div>
-    </div>
 
-    <div id="settings-screen" class="screen hidden">
-        <div class="card">
-            <h3 id="txt-set-head">الإعدادات</h3>
-            
-            <div class="settings-item">
-                <span><i class="fas fa-user-circle"></i> <span id="opt-profile">البروفايل الشخصي</span></span>
-            </div>
-
-            <div class="settings-item" onclick="document.getElementById('lang-list').classList.toggle('hidden')">
-                <span><i class="fas fa-language"></i> <span id="opt-lang">اللغة</span></span>
-                <i class="fas fa-chevron-down"></i>
-            </div>
-            <div id="lang-list" class="hidden" style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom:10px;">
-                <button class="btn-action" style="font-size:0.7rem;" onclick="setLang('ar')">العربية</button>
-                <button class="btn-action" style="font-size:0.7rem;" onclick="setLang('en')">English</button>
-                <button class="btn-action" style="font-size:0.7rem;" onclick="setLang('fr')">Français</button>
-                <button class="btn-action" style="font-size:0.7rem;" onclick="setLang('it')">Italiano</button>
-                <button class="btn-action" style="font-size:0.7rem;" onclick="setLang('de')">Deutsch</button>
-            </div>
-
-            <div class="settings-item" onclick="toggleTheme()">
-                <span><i class="fas fa-adjust"></i> <span id="opt-theme">السمات</span></span>
-            </div>
-
-            <div class="settings-item" onclick="window.open('https://wa.me/201227398087')">
-                <span><i class="fab fa-whatsapp"></i> <span id="opt-support">الدعم الفني</span></span>
-            </div>
-
-            <div style="margin-top: 20px; text-align: center;">
-                <p id="txt-follow">تابعنا على</p>
-                <div style="display: flex; gap: 20px; justify-content: center;">
-                    <a href="https://facebook.com/share/1ENTxFp6Dh/?mibextid=wwXIfr" style="color:#1877f2; font-size: 1.5rem;"><i class="fab fa-facebook"></i></a>
-                    <a href="https://instagram.com/spttolearn?igsh=OTV0ZXhkdWh1ZWJh&utm_source=qr" style="color:#e4405f; font-size: 1.5rem;"><i class="fab fa-instagram"></i></a>
+        <div id="ai-screen" class="screen hidden">
+            <div class="card">
+                <div id="chat-box">
+                    <div class="msg bot">أهلاً بك يا بطل! أنا SPT AI، اسألني أي سؤال في منهجك.</div>
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 15px;">
+                    <input type="text" id="ai-input" placeholder="اكتب سؤالك هنا...">
+                    <button class="btn-action" style="width: 60px; margin-top:0;" onclick="askAI()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="ai-screen" class="screen hidden">
-        <div class="card">
-            <h3 id="txt-ai-title"><i class="fas fa-robot"></i> مساعد SPT الذكي</h3>
-            <div id="chat-box" style="height:250px; overflow-y:auto; background:rgba(0,0,0,0.2); padding:10px; border-radius:15px; margin-bottom:10px;"></div>
-            <input type="text" id="ai-input" placeholder="..." style="width:calc(100% - 60px); display:inline-block;">
-            <button onclick="askAI()" style="width:50px; height:45px; border-radius:12px; background:var(--primary); border:none; color:white;"><i class="fas fa-paper-plane"></i></button>
+        <div id="wallet-screen" class="screen hidden">
+            <div class="card wallet-card">
+                <p>رصيدك الحالي</p>
+                <h1>0.00 EGP</h1>
+            </div>
+            <div class="card">
+                <h4><i class="fas fa-coins"></i> شحن الرصيد</h4>
+                <button class="btn-action" style="background:#ee1c25" onclick="depositVodafone()">
+                    <i class="fas fa-mobile-alt"></i> فودافون كاش
+                </button>
+                <button class="btn-action" style="background:#7c3aed" disabled>
+                    <i class="fas fa-university"></i> إنستا باي (قريباً)
+                </button>
+            </div>
+        </div>
+
+        <div id="settings-screen" class="screen hidden">
+            <div class="card">
+                <div class="menu-item"><i class="fas fa-user-circle"></i> <span>الملف الشخصي</span></div>
+                
+                <div class="menu-item" onclick="changeLanguage('ar')">
+                    <i class="fas fa-language"></i> <span>تغيير اللغة (العربية)</span>
+                </div>
+
+                <div class="menu-item" onclick="toggleTheme()">
+                    <i class="fas fa-adjust"></i> <span>تبديل الوضع (ليلي/نهاري)</span>
+                </div>
+                
+                <div class="menu-item" onclick="contactSupport()">
+                    <i class="fab fa-whatsapp"></i> <span>تواصل مع الدعم</span>
+                </div>
+
+                <div class="social-links">
+                    <a href="javascript:void(0)" onclick="openSocial('fb')" style="color:#1877f2;"><i class="fab fa-facebook"></i></a>
+                    <a href="javascript:void(0)" onclick="openSocial('ig')" style="color:#e4405f;"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            
+            <button class="btn-action" style="background: var(--danger);" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+            </button>
         </div>
     </div>
 
-</div>
+    <div id="main-nav" class="bottom-nav hidden">
+        <div class="nav-item" onclick="navTo('ai-screen', this)"><i class="fas fa-robot"></i><span>البوت</span></div>
+        <div class="nav-item" onclick="navTo('wallet-screen', this)"><i class="fas fa-wallet"></i><span>المحفظة</span></div>
+        <div class="nav-item" onclick="navTo('settings-screen', this)"><i class="fas fa-cog"></i><span>الإعدادات</span></div>
+    </div>
 
-<div class="bottom-nav">
-    <div class="nav-item active" onclick="navTo('auth-screen', this)"><i class="fas fa-home"></i><span id="nav-h">الرئيسية</span></div>
-    <div class="nav-item" onclick="navTo('wallet-screen', this)"><i class="fas fa-wallet"></i><span id="nav-w">المحفظة</span></div>
-    <div class="nav-item" onclick="navTo('ai-screen', this)"><i class="fas fa-robot"></i><span id="nav-a">البوت</span></div>
-    <div class="nav-item" onclick="navTo('settings-screen', this)"><i class="fas fa-cog"></i><span id="nav-s">الإعدادات</span></div>
-</div>
+    <script type="module" src="script.js"></script>
 
-<script>
-    // القاموس الشامل للترجمة (زي ما هو)
-    const translations = {
-        ar: {
-            authDesc: "اختر بوابة الدخول", btnT: "دخول المعلمين", btnS: "بوابة الطالب", btnP: "ولي الأمر",
-            wTitle: "المحفظة الرقمية", wLog: "سجل العمليات", wStatus: "لا توجد عمليات سابقة.",
-            setHead: "الإعدادات", optProf: "البروفايل الشخصي", optLang: "اللغة", optTheme: "السمات (فاتح/داكن)", optSupp: "الدعم الفني",
-            follow: "تابعنا على", aiTitle: "مساعد SPT الذكي", navH: "الرئيسية", navW: "المحفظة", navA: "البوت", navS: "الإعدادات"
-        },
-        en: {
-            authDesc: "Choose Portal", btnT: "Teacher Login", btnS: "Student Portal", btnP: "Parent Portal",
-            wTitle: "Digital Wallet", wLog: "Transaction History", wStatus: "No previous transactions.",
-            setHead: "Settings", optProf: "Personal Profile", optLang: "Language", optTheme: "Themes (Light/Dark)", optSupp: "Technical Support",
-            follow: "Follow Us", aiTitle: "SPT AI Assistant", navH: "Home", navW: "Wallet", navA: "AI Bot", navS: "Settings"
+    <script>
+        const hideSplash = () => {
+            const splash = document.getElementById('splash-screen');
+            if (splash) {
+                splash.style.opacity = '0';
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                }, 600);
+            }
+        };
+
+        // إخفاء الشاشة عند اكتمال التحميل أو بعد 3 ثواني كحد أقصى
+        window.addEventListener('load', hideSplash);
+        setTimeout(hideSplash, 3000); 
+
+        // إظهار البار السفلي لو مسجل دخول
+        if(localStorage.getItem('isLoggedIn') === 'true') {
+            const nav = document.getElementById('main-nav');
+            if(nav) nav.classList.remove('hidden');
         }
-        // ... باقي اللغات زي ما هي في كودك
-    };
-
-    // --- الجزء الخاص بالـ API (الإضافة الجديدة) ---
-    const API_KEY = "AIzaSyCl93_JjPUbzTD54PIRBRwpkQtZx1FMfYI"; 
-
-    async function askAI() {
-    const input = document.getElementById('ai-input');
-    const box = document.getElementById('chat-box');
-    const text = input.value.trim();
-    
-    if (!text) return;
-
-    box.innerHTML += `<div style="background: var(--primary); color: white; padding: 10px; border-radius: 15px 15px 0 15px; margin-bottom: 10px; align-self: flex-end;">${text}</div>`;
-    input.value = "";
-
-    const loadingId = "load-" + Date.now();
-    box.innerHTML += `<div id="${loadingId}" style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 15px 15px 15px 0; margin-bottom: 10px;">جاري الرد...</div>`;
-    box.scrollTop = box.scrollHeight;
-
-    try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                contents: [{ parts: [{ text: text }] }]
-            })
-        });
-
-        if (!response.ok) throw new Error('API Response Error');
-
-        const data = await response.json();
-        const aiResponse = data.candidates[0].content.parts[0].text;
-        document.getElementById(loadingId).innerText = aiResponse;
-    } catch (error) {
-        document.getElementById(loadingId).innerText = "الخدمة مشغولة حالياً، جرب كمان شوية أو اتأكد من مفتاح الـ API.";
-        console.error(error);
-    }
-    box.scrollTop = box.scrollHeight;
-}
-    // --- نهاية إضافة الـ API ---
-
-    window.setLang = (lang) => {
-        const t = translations[lang] || translations['en'];
-        document.getElementById('txt-auth-desc').innerText = t.authDesc;
-        document.getElementById('btn-t').innerText = t.btnT;
-        document.getElementById('btn-s').innerText = t.btnS;
-        document.getElementById('btn-p').innerText = t.btnP;
-        document.getElementById('txt-w-title').innerText = t.wTitle;
-        document.getElementById('txt-w-log').innerHTML = `<i class="fas fa-history"></i> ${t.wLog}`;
-        document.getElementById('wallet-status').innerText = t.wStatus;
-        document.getElementById('txt-set-head').innerText = t.setHead;
-        document.getElementById('opt-profile').innerText = t.optProf;
-        document.getElementById('opt-lang').innerText = t.optLang;
-        document.getElementById('opt-theme').innerText = t.optTheme;
-        document.getElementById('opt-support').innerText = t.optSupp;
-        document.getElementById('txt-follow').innerText = t.follow;
-        document.getElementById('txt-ai-title').innerHTML = `<i class="fas fa-robot"></i> ${t.aiTitle}`;
-        document.getElementById('nav-h').innerText = t.navH;
-        document.getElementById('nav-w').innerText = t.navW;
-        document.getElementById('nav-a').innerText = t.navA;
-        document.getElementById('nav-s').innerText = t.navS;
-
-        document.body.dir = (lang === 'ar' ? 'rtl' : 'ltr');
-        localStorage.setItem('spt_lang', lang);
-        document.getElementById('lang-list').classList.add('hidden');
-    };
-
-    window.toggleTheme = () => {
-        document.body.classList.toggle('light-mode');
-        localStorage.setItem('spt_theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
-    };
-
-    window.navTo = (id, el) => {
-        document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-        document.getElementById(id).classList.remove('hidden');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        el.classList.add('active');
-    };
-
-    window.onload = () => {
-        setLang(localStorage.getItem('spt_lang') || 'ar');
-        if(localStorage.getItem('spt_theme') === 'light') document.body.classList.add('light-mode');
-    };
-</script>
+    </script>
 </body>
 </html>
